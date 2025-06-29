@@ -56,7 +56,7 @@ const Menu = ({
     <>
       <Drawer title="القائمة" onClose={onClose} open={menuOpen}>
         <NavLink
-          to={"/"}
+          to={"/admin"}
           className="logo h-20 flex items-center justify-center rounded-lg mb-10"
           onClick={() => setMenuOpen(false)}
         >

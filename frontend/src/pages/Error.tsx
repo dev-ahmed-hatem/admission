@@ -44,7 +44,7 @@ const Error = ({
           htmlType="button"
           size="large"
           onClick={() => {
-            window.location.href = "/";
+            window.location.href = "/admin";
           }}
         >
           العودة للرئيسية

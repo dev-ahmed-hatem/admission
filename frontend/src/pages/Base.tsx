@@ -10,7 +10,7 @@ import Error from "./Error";
 
 const Base = ({ error }: { error?: any }) => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
-  const isHome = useMatch("/");
+  const isHome = useMatch("/admin");
 
   return (
     <>

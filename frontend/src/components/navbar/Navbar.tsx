@@ -30,7 +30,7 @@ const Navbar = ({
         }}
       />
       <div className="logo h-12 md:h-16">
-        <NavLink to={"/"}>
+        <NavLink to={"/admin"}>
           <Logo className="fill-calypso-900 hover:fill-calypso-950" />
         </NavLink>
       </div>

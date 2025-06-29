@@ -1,22 +1,23 @@
-import Calendar from "../components/home/calendar/Calendar";
-import EmployeesOverview from "../components/home/EmployeesOverview";
-import LatestNotes from "../components/home/LatestNotes";
-import NavigationGrid from "../components/home/NavigationGrid";
-import RecentActions from "../components/home/RecentActions";
+import ProjectsOverview from "@/components/projects/ProjectOverview";
+import ApplicantsStats from "@/components/applicants/ApplicantsStats";
 
 const Home = () => {
   return (
     <div className="font-bold text-xl padding-container pt-10">
-      <div className="flex max-md:flex-col gap-y-8 gap-x-6 justify-between md:max-g-[360px]">
-        <EmployeesOverview />
-        <RecentActions />
+      <ProjectsOverview
+        {...{
+          total: 100,
+          ongoing: 120,
+          completed: 50,
+          pending_approval: 16,
+          paused: 12,
+          overdue: 11,
+        }}
+      />
+      <div className="my-16"></div>
+      <div className="w-full">
+        <ApplicantsStats />
       </div>
-      <div className="my-16"></div>
-      <Calendar />
-      <div className="my-16"></div>
-      <LatestNotes />
-      <div className="my-16"></div>
-      <NavigationGrid />
       <div className="my-16"></div>
     </div>
   );

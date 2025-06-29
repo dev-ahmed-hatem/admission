@@ -29,7 +29,7 @@ export type AppRoute = RouteObject & {
 
 export const appRoutes: AppRoute[] = [
   {
-    path: "",
+    path: "/admin",
     element: (
       <AuthProvider>
         <Base />
