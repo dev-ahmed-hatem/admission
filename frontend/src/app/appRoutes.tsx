@@ -1,7 +1,7 @@
 import Base from "@/pages/Base";
 import Error from "@/pages/Error";
 import SectionView from "@/pages/SectionView";
-import EmployeesList from "@/pages/employees/EmployeesList";
+import EmployeesList from "@/pages/applicants/ApplicantsList";
 import ProjectsList from "@/pages/projects/ProjectsList";
 import { FaUser, FaCalendarCheck, FaMoneyBill, FaFile } from "react-icons/fa";
 import { FaDiagramProject, FaCalendarDays } from "react-icons/fa6";
