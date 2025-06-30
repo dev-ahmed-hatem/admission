@@ -34,7 +34,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     const next = params.get("next");
-    const path = next && next !== "/login" ? next : "/";
+    const path = next && next !== "/login" ? next : "/admin";
     if (logged || verified) window.location.href = path;
   }, [logged, verified]);
 

@@ -38,11 +38,11 @@ export const appRoutes: AppRoute[] = [
     errorElement: <Base error={true} />,
     children: [
       {
-        path: "employees",
+        path: "applicants",
         element: (
           <SectionView
             parentComponent={<EmployeesList />}
-            parentUrl="/employees"
+            parentUrl="/admin/applicants"
           />
         ),
         icon: <FaUser />,

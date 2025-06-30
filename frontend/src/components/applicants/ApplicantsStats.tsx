@@ -1,6 +1,4 @@
 import { Column } from "@ant-design/plots";
-import { ConfigProvider } from "antd";
-import enUS from "antd/locale/en_US";
 
 const ApplicantsStats = () => {
   const data = [
@@ -43,10 +41,6 @@ const ApplicantsStats = () => {
     },
   };
 
-  return (
-    <ConfigProvider locale={enUS}>
-      <Column {...config} />
-    </ConfigProvider>
-  );
+  return <Column className={'text-left'} {...config} />;
 };
 export default ApplicantsStats;
