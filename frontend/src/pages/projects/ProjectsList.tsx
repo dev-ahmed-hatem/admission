@@ -1,4 +1,4 @@
-import ProjectsOverview from "@/components/projects/ProjectOverview";
+import ProjectsOverview from "@/components/applicants/ApplicantsOverview";
 import { Input, Table, Tag } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";

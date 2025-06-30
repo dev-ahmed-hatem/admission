@@ -19,6 +19,8 @@ import NotesPage from "@/pages/notes/NotesPage";
 import SchedulesPage from "@/pages/schedules/SchedulesPage";
 import LoginPage from "@/pages/LoginPage";
 import AuthProvider from "@/providers/AuthProvider";
+import AdmissionsPage from "@/pages/admissions/AdmissionsPage";
+import RegistrationFormPage from "@/pages/admissions/RegistrationFormPage";
 
 export type AppRoute = RouteObject & {
   key?: string;
@@ -46,7 +48,7 @@ export const appRoutes: AppRoute[] = [
           />
         ),
         icon: <FaUser />,
-        label: "الموظفين",
+        label: "المتقدمين",
       },
       {
         path: "projects",
@@ -126,6 +128,17 @@ export const appRoutes: AppRoute[] = [
   {
     path: "*",
     element: <Error notFound={true} />,
+  },
+  {
+    path: "admissions",
+    element: <AdmissionsPage />,
+    errorElement: <Base error={true} />,
+    children: [
+      {
+        path: "apply",
+        element: <RegistrationFormPage />,
+      },
+    ],
   },
 ];
 

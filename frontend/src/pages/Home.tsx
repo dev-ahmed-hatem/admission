@@ -1,18 +1,14 @@
-import ProjectsOverview from "@/components/projects/ProjectOverview";
 import ApplicantsStats from "@/components/applicants/ApplicantsStats";
+import ApplicantsOverview from "@/components/applicants/ApplicantsOverview";
 
 const Home = () => {
   return (
     <div className="font-bold text-xl padding-container pt-10">
-      <ProjectsOverview
-        {...{
-          total: 100,
-          ongoing: 120,
-          completed: 50,
-          pending_approval: 16,
-          paused: 12,
-          overdue: 11,
-        }}
+      <ApplicantsOverview
+        total={230}
+        under_review={45}
+        accepted={120}
+        rejected={30}
       />
       <div className="my-16"></div>
       <div className="w-full">

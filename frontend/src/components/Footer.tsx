@@ -14,17 +14,17 @@ const Footer = () => {
 
         {/* Company Info */}
         <div>
-          <h2 className="text-xl font-semibold">نظام إدارة الموارد البشرية</h2>
+          <h2 className="text-xl font-semibold">نظام إدارة تسجيل الطلاب</h2>
           <p className="text-sm text-gray-400 mt-2">
-            منصة متكاملة لإدارة الموظفين والموارد البشرية بكفاءة.
+            منصة إدارة طلبات الالتحاق والتنسيق.
           </p>
         </div>
       </div>
 
       {/* Copyright */}
       <div className="text-center text-gray-400 text-sm mt-12 border-t border-gray-700 pt-4">
-        &copy; {new Date().getFullYear()} جميع الحقوق محفوظة - نظام إدارة
-        الموارد البشرية بواسطة{" "}
+        &copy; {new Date().getFullYear()} جميع الحقوق محفوظة - نظام إدارة تسجيل
+        الطلاب{" "}
         <a href="https://kaffo.co" className="font-semibold ms-1 text-white">
           Kaffo
         </a>
