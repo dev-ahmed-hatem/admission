@@ -50,7 +50,7 @@ export const applicant: Applicant = {
   mobile: "+201012345678",
   email: "mohamed.ahmed@example.com",
   address: "شارع النصر، مدينة نصر، القاهرة",
-  certificate: "الثانوية العامة",
+  certificate: "معهد فني صحي",
   institute: "معهد فني صحي",
   division: "علوم الاشعة",
   certificate_percentage: 92.75,

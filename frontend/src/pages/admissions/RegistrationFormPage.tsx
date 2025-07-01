@@ -164,11 +164,9 @@ const RegistrationFormPage: React.FC = () => {
                         placeholder="اختر بلد الجنسية"
                         size="large"
                         showSearch
+                        defaultValue={"مصر"}
                       >
                         <Option value="مصر">مصر</Option>
-                        <Option value="السعودية">السعودية</Option>
-                        <Option value="الإمارات">الإمارات</Option>
-                        {/* Add more as needed */}
                       </Select>
                     </Form.Item>
                   </Col>
@@ -210,9 +208,32 @@ const RegistrationFormPage: React.FC = () => {
                         showSearch
                       >
                         <Option value="القاهرة">القاهرة</Option>
+                        <Option value="الجيزة">الجيزة</Option>
                         <Option value="الإسكندرية">الإسكندرية</Option>
                         <Option value="الدقهلية">الدقهلية</Option>
-                        {/* Add more as needed */}
+                        <Option value="البحر الأحمر">البحر الأحمر</Option>
+                        <Option value="البحيرة">البحيرة</Option>
+                        <Option value="الفيوم">الفيوم</Option>
+                        <Option value="الغربية">الغربية</Option>
+                        <Option value="الإسماعيلية">الإسماعيلية</Option>
+                        <Option value="المنوفية">المنوفية</Option>
+                        <Option value="المنيا">المنيا</Option>
+                        <Option value="القليوبية">القليوبية</Option>
+                        <Option value="الوادي الجديد">الوادي الجديد</Option>
+                        <Option value="السويس">السويس</Option>
+                        <Option value="اسوان">اسوان</Option>
+                        <Option value="اسيوط">اسيوط</Option>
+                        <Option value="بني سويف">بني سويف</Option>
+                        <Option value="بورسعيد">بورسعيد</Option>
+                        <Option value="دمياط">دمياط</Option>
+                        <Option value="الشرقية">الشرقية</Option>
+                        <Option value="جنوب سيناء">جنوب سيناء</Option>
+                        <Option value="كفر الشيخ">كفر الشيخ</Option>
+                        <Option value="مطروح">مطروح</Option>
+                        <Option value="الأقصر">الأقصر</Option>
+                        <Option value="قنا">قنا</Option>
+                        <Option value="شمال سيناء">شمال سيناء</Option>
+                        <Option value="سوهاج">سوهاج</Option>
                       </Select>
                     </Form.Item>
                   </Col>
@@ -373,12 +394,12 @@ const RegistrationFormPage: React.FC = () => {
                         },
                       ]}
                     >
-                      <Select placeholder="اختر نوع الشهادة" size="large">
-                        <Option value="الثانوية العامة">نوع 1</Option>
-                        <Option value="نوع 2">نوع 2</Option>
-                        <Option value="نوع 3">نوع 3</Option>
-                        <Option value="نوع 4">نوع 4</Option>
-                        {/* Add more as needed */}
+                      <Select
+                        placeholder="اختر نوع الشهادة"
+                        size="large"
+                        defaultValue={"معهد فني صحي"}
+                      >
+                        <Option value="معهد فني صحي">معهد فني صحي</Option>
                       </Select>
                     </Form.Item>
                   </Col>
@@ -401,26 +422,6 @@ const RegistrationFormPage: React.FC = () => {
                     </Form.Item>
                   </Col>
 
-                  {/* القسم */}
-                  {/* <Col xs={24} md={12}>
-                    <Form.Item
-                      label="القسم"
-                      name="department"
-                      rules={[
-                        {
-                          required: true,
-                          message: "من فضلك أدخل القسم",
-                        },
-                      ]}
-                    >
-                      <Input
-                        placeholder="أدخل اسم القسم"
-                        size="large"
-                        allowClear
-                      />
-                    </Form.Item>
-                  </Col> */}
-
                   {/* الشعبة */}
                   <Col xs={24} md={12}>
                     <Form.Item
@@ -438,21 +439,22 @@ const RegistrationFormPage: React.FC = () => {
                         size="large"
                         onChange={(value) => setSelectedDivision(value)}
                       >
-                        <Option value="علوم الاشعة"> شعبة علوم الاشعة</Option>
-                        <Option value="الاجهزة الطبية">
-                          {" "}
-                          شعبة الاجهزة الطبية
+                        <Option value="علوم الأشعة والتصوير الطبي">
+                          علوم الأشعة والتصوير الطبي
                         </Option>
-                        <Option value="البصريات"> شعبة البصريات</Option>
+                        <Option value="المختبرات الطبية">
+                          المختبرات الطبية
+                        </Option>
                         <Option value="الرعاية التنفسية">
-                          {" "}
-                          شعبة الرعاية التنفسية
+                          الرعاية التنفسية
                         </Option>
-                        <Option value="تركيبات اسنان">
-                          {" "}
-                          شعبة تركيبات اسنان
+                        <Option value="صناعة تركيبات الأسنان">
+                          صناعة تركيبات الأسنان
                         </Option>
-                        <Option value="المختبرات"> شعبة المختبرات</Option>
+                        <Option value="الأجهزة الطبية الحيوية">
+                          الأجهزة الطبية الحيوية
+                        </Option>
+                        <Option value="البصريات"> البصريات</Option>
                       </Select>
                     </Form.Item>
                   </Col>

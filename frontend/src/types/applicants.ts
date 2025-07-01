@@ -11,7 +11,7 @@ export type Applicant = {
   mobile: string;
   email: string;
   address?: string;
-  certificate: "الثانوية العامة" | "الدبلوم" | "معادلة";
+  certificate: "معهد فني صحي";
   institute: "معهد فني صحي";
   division?:
     | "علوم الاشعة"
