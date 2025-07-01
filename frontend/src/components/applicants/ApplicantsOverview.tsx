@@ -5,6 +5,7 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
+import { Link } from "react-router";
 
 type ApplicantsStats = {
   total: number;
@@ -24,16 +25,18 @@ const ApplicantsOverview = ({
       <Row gutter={[8, 8]}>
         {/* Total Applicants */}
         <Col xs={24} sm={12} md={8}>
-          <Card className="bg-calypso-800 text-white">
-            <Statistic
-              title={
-                <span className="text-white text-base">إجمالي المتقدمين</span>
-              }
-              value={total}
-              valueStyle={{ color: "#fff" }}
-              prefix={<TeamOutlined />}
-            />
-          </Card>
+          <Link to={"applicants/"}>
+            <Card className="bg-calypso-800 text-white hover:shadow-xl">
+              <Statistic
+                title={
+                  <span className="text-white text-base">إجمالي المتقدمين</span>
+                }
+                value={total}
+                valueStyle={{ color: "#fff" }}
+                prefix={<TeamOutlined />}
+              />
+            </Card>
+          </Link>
         </Col>
 
         {/* Under Review */}

@@ -39,6 +39,12 @@ class Applicant(models.Model):
         ("المختبرات", "المختبرات"),
     ]
 
+    APPLICATION_STATUS_CHOICES = [
+        ("قيد المراجعة", "قيد المراجعة"),
+        ("مقبول", "مقبول"),
+        ("مرفوض", "مرفوض"),
+    ]
+
     arabic_name = models.CharField(
         verbose_name="اسم الطالب باللغة العربية",
         max_length=200,
@@ -166,6 +172,8 @@ class Applicant(models.Model):
         default=list,
         help_text="في حالة عدم توفر شعبة مناسبة، يمكن إدخال أكثر من رغبة.",
     )
+
+    status = models.CharField(max_length=12, choices=APPLICATION_STATUS_CHOICES, default="قيد المراجعة")
 
     created_at = models.DateTimeField(
         auto_now_add=True,

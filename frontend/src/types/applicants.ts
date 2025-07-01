@@ -23,7 +23,8 @@ export type Applicant = {
   certificate_percentage?: number;
   certificate_degree?: string;
   certificate_year: number;
-  preferences?: string[]; // ✅ updated
+  preferences?: string[];
+  status?: "قيد المراجعة" | "مرفوض" | "مقبول";
   created_at?: string;
   updated_at?: string;
 };
