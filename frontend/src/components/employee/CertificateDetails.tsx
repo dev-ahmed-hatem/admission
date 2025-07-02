@@ -1,5 +1,5 @@
 import { Applicant } from "@/types/applicants";
-import { Descriptions, Tag } from "antd";
+import { Descriptions } from "antd";
 
 const CertificateDetails = ({ applicant }: { applicant: Applicant }) => {
   return (

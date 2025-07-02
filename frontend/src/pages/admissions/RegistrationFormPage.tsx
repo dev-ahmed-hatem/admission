@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Layout,
   Typography,
@@ -15,6 +15,11 @@ import {
 import FormSectionTitle from "@/components/admissions/FormSectionTitle";
 import { extractBirthdateFromNationalId } from "@/utils";
 import Preferences from "./Preferences";
+import { useCreateRequestMutation } from "@/app/api/endpoints/applicants";
+import { axiosBaseQueryError } from "@/app/api/axiosBaseQuery";
+import { handleServerErrors } from "@/utils/handleForm";
+import { useNotification } from "@/providers/NotificationProvider";
+import { useNavigate } from "react-router";
 
 const { Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -23,21 +28,55 @@ const { Option } = Select;
 const RegistrationFormPage: React.FC = () => {
   const [form] = Form.useForm();
   const [selectedDivision, setSelectedDivision] = useState(null);
+  const notification = useNotification();
+  const navigate = useNavigate();
+
+  const [
+    createRequest,
+    { data, isError, error: applicantError, isSuccess, isLoading },
+  ] = useCreateRequestMutation();
 
   const onFinish = (values: any) => {
-    console.log("Form submitted:", values);
-    // handle submission logic here
+    const data = {
+      ...values,
+      birthdate: values.birthdate.format("YYYY-MM-DD"),
+    };
+
+    createRequest(data);
   };
+
+  useEffect(() => {
+    if (isError) {
+      const error = applicantError as axiosBaseQueryError;
+      if (error.status == 400) {
+        handleServerErrors({
+          errorData: error.data as Record<string, string[]>,
+          form,
+        });
+      }
+
+      notification.error({ message: "خطأ في بيانات التسجيل!" });
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      notification.success({
+        message: `تم تسجيل الطلب`,
+      });
+      navigate(`/admissions/track-application/`, { state: data });
+    }
+  }, [isSuccess]);
 
   const onNationalIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    form.setFieldsValue({ nationalId: value });
+    form.setFieldsValue({ national_id: value });
 
     const birthDate = extractBirthdateFromNationalId(value);
     if (birthDate) {
-      form.setFieldsValue({ birthday: birthDate });
+      form.setFieldsValue({ birthdate: birthDate });
     } else {
-      form.setFieldsValue({ birthday: null });
+      form.setFieldsValue({ birthdate: null });
     }
   };
 
@@ -95,7 +134,7 @@ const RegistrationFormPage: React.FC = () => {
                   <Col xs={24} md={12}>
                     <Form.Item
                       label="اسم الطالب باللغة العربية"
-                      name="studentArabicName"
+                      name="arabic_name"
                       rules={[
                         {
                           required: true,
@@ -113,7 +152,7 @@ const RegistrationFormPage: React.FC = () => {
                   <Col xs={24} md={12}>
                     <Form.Item
                       label="اسم الطالب باللغة الانجليزية"
-                      name="studentEnglishName"
+                      name="english_name"
                       rules={[
                         {
                           required: true,
@@ -164,7 +203,6 @@ const RegistrationFormPage: React.FC = () => {
                         placeholder="اختر بلد الجنسية"
                         size="large"
                         showSearch
-                        defaultValue={"مصر"}
                       >
                         <Option value="مصر">مصر</Option>
                       </Select>
@@ -258,7 +296,7 @@ const RegistrationFormPage: React.FC = () => {
                   <Col xs={24} md={12}>
                     <Form.Item
                       label="الرقم القومي"
-                      name="nationalId"
+                      name="national_id"
                       rules={[
                         {
                           required: true,
@@ -282,7 +320,7 @@ const RegistrationFormPage: React.FC = () => {
                   <Col>
                     <Form.Item
                       label="تاريخ الميلاد"
-                      name="birthday"
+                      name="birthdate"
                       rules={[
                         {
                           required: true,
@@ -309,7 +347,7 @@ const RegistrationFormPage: React.FC = () => {
                   <Col xs={24} md={12}>
                     <Form.Item
                       label="رقم الموبايل"
-                      name="mobileNumber"
+                      name="mobile"
                       rules={[
                         {
                           required: true,
@@ -394,11 +432,7 @@ const RegistrationFormPage: React.FC = () => {
                         },
                       ]}
                     >
-                      <Select
-                        placeholder="اختر نوع الشهادة"
-                        size="large"
-                        defaultValue={"معهد فني صحي"}
-                      >
+                      <Select placeholder="اختر نوع الشهادة" size="large">
                         <Option value="معهد فني صحي">معهد فني صحي</Option>
                       </Select>
                     </Form.Item>
@@ -463,7 +497,7 @@ const RegistrationFormPage: React.FC = () => {
                   <Col xs={24} md={12}>
                     <Form.Item
                       label="النسبة المئوية للشهادة (%)"
-                      name="certificatePercentage"
+                      name="certificate_percentage"
                       rules={[
                         {
                           required: true,
@@ -489,7 +523,7 @@ const RegistrationFormPage: React.FC = () => {
                   <Col xs={24} md={12}>
                     <Form.Item
                       label="درجة الشهادة"
-                      name="certificateDegree"
+                      name="certificate_degree"
                       rules={[
                         {
                           required: true,
@@ -513,7 +547,7 @@ const RegistrationFormPage: React.FC = () => {
                   <Col xs={24} md={12}>
                     <Form.Item
                       label="السنة"
-                      name="certificateYear"
+                      name="certificate_year"
                       rules={[
                         {
                           required: true,
@@ -595,6 +629,7 @@ const RegistrationFormPage: React.FC = () => {
                       block
                       size="large"
                       className="!bg-calypso-700 hover:!bg-calypso border-none font-bold text-white mt-4"
+                      loading={isLoading}
                     >
                       إرسال الطلب
                     </Button>

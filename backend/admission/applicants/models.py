@@ -19,24 +19,17 @@ class Applicant(models.Model):
         ("أخرى", "أخرى"),
     ]
 
-    CERTIFICATE_CHOICES = [
-        ("الثانوية العامة", "الثانوية العامة"),
-        ("الدبلوم", "الدبلوم"),
-        ("معادلة", "معادلة"),
-        # add more if needed
-    ]
-
     INSTITUTE_CHOICES = [
         ("معهد فني صحي", "معهد فني صحي"),
     ]
 
     DIVISION_CHOICES = [
-        ("علوم الاشعة", "علوم الاشعة"),
-        ("الاجهزة الطبية", "الاجهزة الطبية"),
-        ("البصريات", "البصريات"),
+        ("علوم الأشعة والتصوير الطبي", "علوم الأشعة والتصوير الطبي"),
+        ("المختبرات الطبية", "المختبرات الطبية"),
         ("الرعاية التنفسية", "الرعاية التنفسية"),
-        ("تركيبات اسنان", "تركيبات اسنان"),
-        ("المختبرات", "المختبرات"),
+        ("صناعة تركيبات الأسنان", "صناعة تركيبات الأسنان"),
+        ("الأجهزة الطبية الحيوية", "الأجهزة الطبية الحيوية"),
+        ("البصريات", "البصريات"),
     ]
 
     APPLICATION_STATUS_CHOICES = [
@@ -112,6 +105,7 @@ class Applicant(models.Model):
     email = models.EmailField(
         verbose_name="البريد الالكتروني",
         validators=[EmailValidator()],
+        unique=True,
     )
 
     address = models.TextField(
@@ -122,7 +116,6 @@ class Applicant(models.Model):
     certificate = models.CharField(
         verbose_name="الشهادة",
         max_length=100,
-        choices=CERTIFICATE_CHOICES,
     )
 
     institute = models.CharField(

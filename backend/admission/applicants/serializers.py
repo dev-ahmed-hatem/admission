@@ -9,6 +9,8 @@ class ApplicantListSerializer(serializers.ModelSerializer):
 
 
 class ApplicantReadSerializer(serializers.ModelSerializer):
+    created_at = serializers.DateTimeField(format="%d/%m/%Y %H:%M", read_only=True)
+
     class Meta:
         model = Applicant
         fields = "__all__"

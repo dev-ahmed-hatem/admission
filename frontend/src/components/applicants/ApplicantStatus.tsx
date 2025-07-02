@@ -1,8 +1,3 @@
-import {
-  projectsEndpoints,
-  useGetProjectQuery,
-  useSwitchProjectStatusMutation,
-} from "@/app/api/endpoints/projects";
 import { useAppDispatch } from "@/app/redux/hooks";
 import { useNotification } from "@/providers/NotificationProvider";
 import { Project, statusColors } from "@/types/project";
@@ -43,61 +38,20 @@ const ApplicantStatus = ({
   id: Project["id"];
   isProjectOverdue: boolean;
 }) => {
-  const { data: project, isFetching: loading } = useGetProjectQuery({
-    id,
-    format: "detailed",
-  });
-
-  const [transition, setTransition] = useState(getButtonText(project?.status!));
   const notification = useNotification();
   const dispatch = useAppDispatch();
 
-  const [
-    changeState,
-    { data: switchRes, isLoading: switchingState, isError: switchError },
-  ] = useSwitchProjectStatusMutation();
+  // const handleStatusChange = () => {
+  //   changeState({ id, status: transition?.nextStatus! });
+  // };
 
-  const handleStatusChange = () => {
-    changeState({ id, status: transition?.nextStatus! });
-  };
-
-  useEffect(() => {
-    if (switchError) {
-      notification.error({
-        message: "حدث خطأ في تغيير الحالة ! برجاء إعادة المحاولة",
-      });
-    }
-  }, [switchError]);
-
-  useEffect(() => {
-    if (switchRes) {
-      dispatch(
-        projectsEndpoints.util.updateQueryData(
-          "getProject",
-          { id, format: "detailed" },
-          (draft: Project) => {
-            draft.status = switchRes.status;
-          }
-        )
-      );
-      notification.success({
-        message: "تم تغيير الحالة بنجاح",
-      });
-    }
-  }, [switchRes]);
-
-  useEffect(() => {
-    setTransition(getButtonText(project?.status!));
-  }, [project]);
-
-  if (loading) return <Loading />;
   return (
     <>
       <Button
         type="primary"
         icon={<TbStatusChange />}
-        onClick={handleStatusChange}
-        loading={switchingState}
+        // onClick={handleStatusChange}
+        // loading={switchingState}
       >
         قيد المراجعة
       </Button>
