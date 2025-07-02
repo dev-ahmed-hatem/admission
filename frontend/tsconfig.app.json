@@ -27,5 +27,5 @@
     //define @ paths
     "paths": { "@/*": ["./src/*"] }
   },
-  "include": ["src"]
+  "include": ["src", "legecy_files/pages/EmployeeEdit.tsx", "legecy_files/pages/EmployeeForm.tsx"]
 }

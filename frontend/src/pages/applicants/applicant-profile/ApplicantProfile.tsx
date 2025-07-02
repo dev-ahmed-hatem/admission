@@ -5,16 +5,16 @@ import {
   CloseOutlined,
   CheckOutlined,
 } from "@ant-design/icons";
-import ContactInfo from "../../../components/employee/ContactInfo";
-import PersonalInfo from "../../../components/employee/PersonalInfo";
+import ContactInfo from "../../../components/applicants/ContactInfo";
+import PersonalInfo from "../../../components/applicants/PersonalInfo";
 import { useLocation, useParams } from "react-router";
 import Loading from "@/components/Loading";
 import Error from "../../Error";
 import { useNavigate } from "react-router";
 import { useNotification } from "@/providers/NotificationProvider";
 import { Applicant } from "@/types/applicants";
-import CertificateDetails from "../../../components/employee/CertificateDetails";
-import Preferences from "../../../components/employee/Preferences";
+import CertificateDetails from "../../../components/applicants/CertificateDetails";
+import Preferences from "../../../components/applicants/Preferences";
 import ApplicantStatus from "@/components/applicants/ApplicantStatus";
 import { useGetApplicationQuery } from "@/app/api/endpoints/applicants";
 import { axiosBaseQueryError } from "@/app/api/axiosBaseQuery";

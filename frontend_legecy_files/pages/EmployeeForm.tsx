@@ -11,14 +11,14 @@ import {
   Image,
 } from "antd";
 import dayjs, { Dayjs } from "dayjs";
-import { Employee } from "../../types/employee";
+import { Employee } from "../../src/types/employee";
 import UploadImage from "@/components/file-handling/UploadImage";
 import { useEffect, useState } from "react";
 import {
   useEmployeeMutation,
   useGetAllDepartmentsQuery,
 } from "@/app/api/endpoints/employees";
-import Error from "../Error";
+import Error from "../../src/pages/Error";
 import Loading from "@/components/Loading";
 import { calculateAge } from "@/utils";
 import UploadFile from "@/components/file-handling/UploadFile";
