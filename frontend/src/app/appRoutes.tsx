@@ -49,6 +49,10 @@ export const appRoutes: AppRoute[] = [
     element: <Navigate to={"/admissions"} />,
   },
   {
+    path: "*",
+    element: <Error notFound={true} />,
+  },
+  {
     path: "admissions",
     element: <AdmissionsPage />,
     errorElement: <Base error={true} />,
@@ -64,10 +68,6 @@ export const appRoutes: AppRoute[] = [
             <ApplicantProfilePage />
           </div>
         ),
-      },
-      {
-        path: "*",
-        element: <Error notFound={true} />,
       },
     ],
   },

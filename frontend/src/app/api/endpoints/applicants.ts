@@ -1,7 +1,9 @@
 import { Applicant } from "@/types/applicants";
 import api from "../apiSlice";
+import { PaginatedResponse } from "@/types/paginatedResponse";
+import qs from "query-string";
 
-const applicantsEndpoints = api.injectEndpoints({
+export const applicantsEndpoints = api.injectEndpoints({
   endpoints: (builder) => ({
     createRequest: builder.mutation<Applicant, Record<string, any>>({
       query: (data) => ({
@@ -16,6 +18,30 @@ const applicantsEndpoints = api.injectEndpoints({
         method: "GET",
       }),
     }),
+    getApplicants: builder.query<
+      PaginatedResponse<Applicant>,
+      Record<string, any>
+    >({
+      query: (params) => ({
+        url: `/applicants/applicants?${qs.stringify(params || {})}`,
+      }),
+    }),
+    setApplicantStatus: builder.mutation<
+      { status: "مقبول" | "مرفوض" },
+      { id: string; status: "مرفوض" | "مقبول" }
+    >({
+      query: (params) => ({
+        url: `/applicants/applicants/${params.id}/set_status/`,
+        method: "POST",
+        data: { status: params.status },
+      }),
+    }),
+    deleteApplicant: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/applicants/applicants/${id}/`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -23,4 +49,7 @@ export const {
   useCreateRequestMutation,
   useGetApplicationQuery,
   useLazyGetApplicationQuery,
+  useGetApplicantsQuery,
+  useSetApplicantStatusMutation,
+  useDeleteApplicantMutation,
 } = applicantsEndpoints;

@@ -1,6 +1,6 @@
 import { RouteObject } from "react-router";
 import appRoutes, { AppRoute } from "./appRoutes";
-import ApplicantProfilePage from "@/pages/applicants/applicant-profile/ApplicantProfileView";
+import ApplicantProfile from "@/pages/applicants/applicant-profile/ApplicantProfile";
 
 const alterRoute = function (
   appRoutes: AppRoute[],
@@ -60,8 +60,8 @@ const addSubRoutes = (
 let routes: RouteObject[] = addSubRoutes(appRoutes, {
   "/admin/applicants": [
     {
-      path: "applicant-profile/:applicant_id",
-      element: <ApplicantProfilePage />,
+      path: "applicant-profile/:national_id",
+      element: <ApplicantProfile />,
     },
   ],
 });

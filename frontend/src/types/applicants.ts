@@ -1,4 +1,5 @@
 export type Applicant = {
+  id: string;
   arabic_name: string;
   english_name: string;
   religion: "مسلم" | "مسيحي" | "أخرى";
@@ -7,7 +8,7 @@ export type Applicant = {
   governorate: string;
   city: string;
   national_id: string;
-  birthdate: string; // ISO format
+  birthdate: string;
   mobile: string;
   email: string;
   address?: string;
@@ -21,10 +22,10 @@ export type Applicant = {
     | "تركيبات اسنان"
     | "المختبرات";
   certificate_percentage?: number;
-  certificate_degree?: string;
+  total_mark: number;
+  total_out_of: number;
   certificate_year: number;
-  preferences?: string[];
-  status?: "قيد المراجعة" | "مرفوض" | "مقبول";
+  status: "قيد المراجعة" | "مرفوض" | "مقبول";
   created_at?: string;
   updated_at?: string;
 };

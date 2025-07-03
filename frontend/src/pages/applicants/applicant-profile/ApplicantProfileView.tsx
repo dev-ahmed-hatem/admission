@@ -7,42 +7,19 @@ import {
 } from "@ant-design/icons";
 import ContactInfo from "../../../components/applicants/ContactInfo";
 import PersonalInfo from "../../../components/applicants/PersonalInfo";
-import { Navigate, useLocation, useParams } from "react-router";
-import Loading from "@/components/Loading";
-import Error from "../../Error";
+import { Navigate, useLocation } from "react-router";
 import { useNavigate } from "react-router";
 import { useNotification } from "@/providers/NotificationProvider";
 import { Applicant } from "@/types/applicants";
 import CertificateDetails from "../../../components/applicants/CertificateDetails";
-import Preferences from "../../../components/applicants/Preferences";
 import ApplicantStatus from "@/components/applicants/ApplicantStatus";
-import { useGetApplicationQuery } from "@/app/api/endpoints/applicants";
-import { axiosBaseQueryError } from "@/app/api/axiosBaseQuery";
-
-// // Sample Applicant Data
-// export const applicant: Applicant = {
-//   arabic_name: "محمد أحمد عبد الرحمن",
-//   english_name: "Mohamed Ahmed Abdelrahman",
-//   religion: "مسلم",
-//   nationality: "مصر",
-//   gender: "ذكر",
-//   governorate: "القاهرة",
-//   city: "مدينة نصر",
-//   national_id: "29805010123456",
-//   birthdate: "1998-05-01",
-//   mobile: "+201012345678",
-//   email: "mohamed.ahmed@example.com",
-//   address: "شارع النصر، مدينة نصر، القاهرة",
-//   certificate: "معهد فني صحي",
-//   institute: "معهد فني صحي",
-//   division: "علوم الاشعة",
-//   certificate_percentage: 92.75,
-//   certificate_degree: "امتياز",
-//   certificate_year: 2022,
-//   preferences: ["علوم الأشعة", "الأجهزة الطبية", "البصريات"],
-//   created_at: " 2025-05-15 15:08:27",
-//   status: "قيد المراجعة",
-// };
+import { useEffect } from "react";
+import {
+  applicantsEndpoints,
+  useDeleteApplicantMutation,
+  useSetApplicantStatusMutation,
+} from "@/app/api/endpoints/applicants";
+import { useAppDispatch } from "@/app/redux/hooks";
 
 const items = (applicant: Applicant) => [
   {
@@ -61,9 +38,9 @@ const items = (applicant: Applicant) => [
     children: <CertificateDetails applicant={applicant} />,
   },
   {
-    label: `الرغبات`,
+    label: `الملفات`,
     key: "4",
-    children: <Preferences applicant={applicant} />,
+    // children: <Preferences applicant={applicant} />,
   },
 ];
 
@@ -72,93 +49,86 @@ const ApplicantProfileView: React.FC<{
 }> = ({ applicant_data }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const applicant = applicant_data || location.state;
+  const applicant: Applicant = applicant_data || location.state;
   const notification = useNotification();
+  const dispatch = useAppDispatch();
   const adminView = location.pathname.startsWith(
     "/admin/applicants/applicant-profile/"
   );
 
-  // const [
-  //   switchActive,
-  //   { data: switchRes, isLoading: switching, isError: switchError },
-  // ] = useSwitchEmployeeActiveMutation();
-  // const [
-  //   deleteEmployee,
-  //   { isError: deleteError, isLoading: deleting, isSuccess: deleted },
-  // ] = useDeleteEmployeeMutation();
+  const [
+    deleteApplicant,
+    { isError: deleteError, isLoading: deleting, isSuccess: deleted },
+  ] = useDeleteApplicantMutation();
 
-  // const dispatch = useAppDispatch();
+  const [setStatus, { data: newStatus, isLoading, isSuccess, isError }] =
+    useSetApplicantStatusMutation();
 
-  // const [imageError, setImageError] = useState(false);
-  // const [isActive, setIsActive] = useState<boolean | null>(null);
+  const handleDelete = () => {
+    deleteApplicant(applicant.id);
+  };
 
-  // const toggleStatus = () => {
-  //   switchActive(applicant_id as string);
-  // };
+  useEffect(() => {
+    if (deleteError) {
+      notification.error({
+        message: "حدث خطأ أثناء حذف الطلب ! برجاء إعادة المحاولة",
+      });
+    }
+  }, [deleteError]);
 
-  // const handleDelete = () => {
-  //   deleteEmployee(applicant_id as string);
-  // };
+  useEffect(() => {
+    if (deleted) {
+      notification.success({
+        message: "تم حذف الطلب بنجاح",
+      });
 
-  // useEffect(() => {
-  //   if (employee) setIsActive(employee.is_active);
-  // }, [employee]);
+      navigate("/admin/applicants");
+    }
+  }, [deleted]);
 
-  // useEffect(() => {
-  //   if (switchError) {
-  //     notification.error({
-  //       message: "حدث خطأ في تغيير الحالة ! برجاء إعادة المحاولة",
-  //     });
-  //   }
-  // }, [switchError]);
+  useEffect(() => {
+    if (isError) {
+      notification.error({
+        message: "حدث خطأ في تغيير الحالة ! برجاء إعادة المحاولة",
+      });
+    }
+  }, [isError]);
 
-  // useEffect(() => {
-  //   if (switchRes) {
-  //     if (employee) setIsActive(switchRes.is_active);
-  //     dispatch(
-  //       employeesEndpoints.util.updateQueryData(
-  //         "getEmployee",
-  //         { id: applicant_id as string, format: "detailed" },
-  //         (draft: Employee) => {
-  //           draft.is_active = switchRes.is_active;
-  //         }
-  //       )
-  //     );
-  //     notification.success({
-  //       message: "تم تغيير الحالة بنجاح",
-  //     });
-  //   }
-  // }, [switchRes]);
-
-  // useEffect(() => {
-  //   if (deleteError) {
-  //     notification.error({
-  //       message: "حدث خطأ أثناء حذف الموظف ! برجاء إعادة المحاولة",
-  //     });
-  //   }
-  // }, [deleteError]);
-
-  // useEffect(() => {
-  //   if (deleted) {
-  //     notification.success({
-  //       message: "تم حذف الموظف بنجاح",
-  //     });
-
-  //     navigate("/employees");
-  //   }
-  // }, [deleted]);
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(
+        applicantsEndpoints.util.updateQueryData(
+          "getApplication",
+          applicant.national_id,
+          (draft: Applicant) => {
+            draft.status = newStatus.status;
+          }
+        )
+      );
+      notification.success({
+        message: "تم تغيير الحالة بنجاح",
+      });
+    }
+  }, [isSuccess]);
 
   if (!applicant) return <Navigate to={"/admissions"} />;
-
   return (
     <>
-      {/* Employee Header */}
-      <Card className="shadow-lg rounded-xl">
+      {/* Applicant Header */}
+      <Card
+        className={`shadow-lg rounded-xl ${
+          applicant?.status === "مقبول" && "border-green-600 border-x-8"
+        } ${applicant?.status === "مرفوض" && "border-red-500 border-x-8 "}`}
+      >
         <div className="flex items-center justify-between flex-wrap gap-y-6">
           {/* Avatar with Fallback */}
           <div className="flex items-center flex-wrap gap-4">
             <Avatar
-              className="bg-calypso text-white font-semibold size-14"
+              className={`bg-calypso ${
+                applicant?.status === "مقبول" && "bg-green-600"
+              } ${
+                applicant?.status === "مرفوض" && "bg-red-500"
+              } text-white font-semibold size-14`}
               icon={<UserOutlined />}
             >
               {applicant!.arabic_name?.slice(0, 1)}
@@ -166,15 +136,12 @@ const ApplicantProfileView: React.FC<{
 
             <div>
               <h2 className="text-xl font-bold">{applicant!.arabic_name}</h2>
-              <p className="text-gray-500">{applicant!.certificate}</p>
+              <p className="text-gray-500">{applicant!.institute}</p>
             </div>
           </div>
 
           {/* Status */}
-          <ApplicantStatus
-            id={applicant?.national_id!}
-            isProjectOverdue={false}
-          />
+          <ApplicantStatus applicant={applicant} isAdminView={adminView} />
         </div>
       </Card>
 
@@ -202,42 +169,48 @@ const ApplicantProfileView: React.FC<{
         {/* Action Button */}
         {adminView && (
           <div className="btn-wrapper flex md:justify-end mt-4 flex-wrap gap-4">
-            <Button
-              type="primary"
-              icon={<CheckOutlined />}
-              onClick={() => {
-                // Handle accept logic
-                console.log("Applicant accepted!");
-              }}
-              className="bg-green-600 hover:bg-green-700 border-none"
-            >
-              قبول
-            </Button>
+            {applicant.status === "قيد المراجعة" && (
+              <>
+                <Button
+                  type="primary"
+                  icon={<CheckOutlined />}
+                  onClick={() => {
+                    setStatus({
+                      id: applicant.id,
+                      status: "مقبول",
+                    });
+                  }}
+                  className="bg-green-600 hover:bg-green-700 border-none"
+                >
+                  قبول
+                </Button>
 
-            <Button
-              danger
-              icon={<CloseOutlined />}
-              onClick={() => {
-                // Handle reject logic
-                console.log("Applicant rejected!");
-              }}
-            >
-              رفض
-            </Button>
+                <Button
+                  danger
+                  icon={<CloseOutlined />}
+                  onClick={() => {
+                    setStatus({
+                      id: applicant.id,
+                      status: "مرفوض",
+                    });
+                  }}
+                >
+                  رفض
+                </Button>
+              </>
+            )}
 
             <Popconfirm
               title="هل أنت متأكد من حذف هذا الطلب؟"
               okText="نعم"
               cancelText="لا"
-              onConfirm={() => {
-                // Handle delete logic
-                console.log("Applicant deleted!");
-              }}
+              onConfirm={handleDelete}
             >
               <Button
                 className="enabled:bg-red-500 enabled:border-red-500 enabled:shadow-[0_2px_0_rgba(0,58,58,0.31)] 
       enabled:hover:border-red-400 enabled:hover:bg-red-400 enabled:text-white"
                 icon={<DeleteOutlined />}
+                loading={deleting}
               >
                 حذف الطلب
               </Button>

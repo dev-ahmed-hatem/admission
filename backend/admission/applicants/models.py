@@ -113,11 +113,6 @@ class Applicant(models.Model):
         blank=True,
     )
 
-    certificate = models.CharField(
-        verbose_name="الشهادة",
-        max_length=100,
-    )
-
     institute = models.CharField(
         verbose_name="المعهد",
         max_length=100,
@@ -144,11 +139,12 @@ class Applicant(models.Model):
         blank=True,
     )
 
-    certificate_degree = models.CharField(
-        verbose_name="مجموع الشهادة",
-        max_length=50,
-        blank=True,
-        null=True,
+    total_mark = models.PositiveIntegerField(
+        verbose_name="المجموع",
+    )
+
+    total_out_of = models.PositiveIntegerField(
+        verbose_name="إجمالي الدرجات",
     )
 
     certificate_year = models.PositiveIntegerField(
@@ -157,13 +153,6 @@ class Applicant(models.Model):
             MinValueValidator(2016),
             MaxValueValidator(2024),
         ],
-    )
-
-    preferences = models.JSONField(
-        verbose_name="الرغبات",
-        blank=True,
-        default=list,
-        help_text="في حالة عدم توفر شعبة مناسبة، يمكن إدخال أكثر من رغبة.",
     )
 
     status = models.CharField(max_length=12, choices=APPLICATION_STATUS_CHOICES, default="قيد المراجعة")

@@ -19,6 +19,8 @@ const Breadcrumbs: React.FC = () => {
         ? parentPath + "/" + route.path
         : route.path;
 
+      console.log(location.pathname);
+
       if (pathname === routeFullPath || pathname.startsWith(routeFullPath!)) {
         setItems((items) => [
           ...items,

@@ -14,12 +14,12 @@ import {
 } from "antd";
 import FormSectionTitle from "@/components/admissions/FormSectionTitle";
 import { extractBirthdateFromNationalId } from "@/utils";
-import Preferences from "./Preferences";
 import { useCreateRequestMutation } from "@/app/api/endpoints/applicants";
 import { axiosBaseQueryError } from "@/app/api/axiosBaseQuery";
 import { handleServerErrors } from "@/utils/handleForm";
 import { useNotification } from "@/providers/NotificationProvider";
 import { useNavigate } from "react-router";
+import dayjs from "dayjs";
 
 const { Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -27,7 +27,6 @@ const { Option } = Select;
 
 const RegistrationFormPage: React.FC = () => {
   const [form] = Form.useForm();
-  const [selectedDivision, setSelectedDivision] = useState(null);
   const notification = useNotification();
   const navigate = useNavigate();
 
@@ -79,6 +78,22 @@ const RegistrationFormPage: React.FC = () => {
       form.setFieldsValue({ birthdate: null });
     }
   };
+
+  const totalMark = Form.useWatch("total_mark", form);
+  const totalOutOf = Form.useWatch("total_out_of", form);
+
+  useEffect(() => {
+    if (totalMark && totalOutOf && Number(totalOutOf) > 0) {
+      const percentage = (Number(totalMark) / Number(totalOutOf)) * 100;
+      form.setFieldsValue({
+        certificate_percentage: percentage.toFixed(2),
+      });
+    } else {
+      form.setFieldsValue({
+        certificate_percentage: undefined,
+      });
+    }
+  }, [totalMark, totalOutOf, form]);
 
   return (
     <Layout dir="rtl" className="min-h-screen bg-gray-50">
@@ -326,6 +341,19 @@ const RegistrationFormPage: React.FC = () => {
                           required: true,
                           message: "من فضلك اختر تاريخ الميلاد",
                         },
+                        {
+                          validator: (_, value) => {
+                            if (!value) {
+                              return Promise.resolve();
+                            }
+                            if (dayjs(value).isBefore(dayjs("1995-10-01"))) {
+                              return Promise.reject(
+                                new Error("لا يسمح بإدخال تاريخ قبل 01-10-1995")
+                              );
+                            }
+                            return Promise.resolve();
+                          },
+                        },
                       ]}
                     >
                       <DatePicker
@@ -420,25 +448,7 @@ const RegistrationFormPage: React.FC = () => {
                 <FormSectionTitle title="بيانات الشهادة" />
 
                 <Row gutter={[16, 16]}>
-                  {/* Certificate Type */}
-                  <Col xs={24} md={12}>
-                    <Form.Item
-                      label="الشهادة"
-                      name="certificate"
-                      rules={[
-                        {
-                          required: true,
-                          message: "من فضلك اختر الشهادة",
-                        },
-                      ]}
-                    >
-                      <Select placeholder="اختر نوع الشهادة" size="large">
-                        <Option value="معهد فني صحي">معهد فني صحي</Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-
-                  {/* School Name */}
+                  {/* Institute */}
                   <Col xs={24} md={12}>
                     <Form.Item
                       label="اسم المعهد"
@@ -456,7 +466,7 @@ const RegistrationFormPage: React.FC = () => {
                     </Form.Item>
                   </Col>
 
-                  {/* الشعبة */}
+                  {/* Division */}
                   <Col xs={24} md={12}>
                     <Form.Item
                       label="الشعبة"
@@ -468,11 +478,7 @@ const RegistrationFormPage: React.FC = () => {
                         },
                       ]}
                     >
-                      <Select
-                        placeholder="اختر الشعبة"
-                        size="large"
-                        onChange={(value) => setSelectedDivision(value)}
-                      >
+                      <Select placeholder="اختر الشعبة" size="large">
                         <Option value="علوم الأشعة والتصوير الطبي">
                           علوم الأشعة والتصوير الطبي
                         </Option>
@@ -488,62 +494,77 @@ const RegistrationFormPage: React.FC = () => {
                         <Option value="الأجهزة الطبية الحيوية">
                           الأجهزة الطبية الحيوية
                         </Option>
-                        <Option value="البصريات"> البصريات</Option>
+                        <Option value="البصريات">البصريات</Option>
                       </Select>
                     </Form.Item>
                   </Col>
 
-                  {/* Certificate Percentage (%) */}
+                  {/* المجموع (total_mark) */}
                   <Col xs={24} md={12}>
                     <Form.Item
-                      label="النسبة المئوية للشهادة (%)"
-                      name="certificate_percentage"
+                      label="المجموع"
+                      name="total_mark"
                       rules={[
                         {
                           required: true,
-                          message: "من فضلك أدخل النسبة المئوية",
+                          message: "من فضلك أدخل المجموع",
                         },
                         {
                           pattern: /^\d+(\.\d{1,2})?$/,
                           message:
-                            "من فضلك أدخل رقم صحيح أو عشري بحد أقصى رقمين عشريين",
+                            "يجب إدخال رقم صحيح أو عشري بحد أقصى رقمين عشريين",
                         },
                       ]}
                     >
                       <Input
-                        placeholder="أدخل النسبة المئوية للشهادة"
+                        placeholder="أدخل المجموع"
                         size="large"
-                        suffix="%"
                         allowClear
                       />
                     </Form.Item>
                   </Col>
 
-                  {/* Certificate Degree */}
+                  {/* من اجمالي الدرجات (total_out_of) */}
                   <Col xs={24} md={12}>
                     <Form.Item
-                      label="درجة الشهادة"
-                      name="certificate_degree"
+                      label="من اجمالي الدرجات"
+                      name="total_out_of"
                       rules={[
                         {
                           required: true,
-                          message: "من فضلك أدخل درجة الشهادة",
+                          message: "من فضلك أدخل اجمالي الدرجات",
                         },
                         {
-                          pattern: /^\d+$/,
-                          message: "درجة الشهادة يجب أن تكون رقم صحيح",
+                          pattern: /^\d+(\.\d{1,2})?$/,
+                          message:
+                            "يجب إدخال رقم صحيح أو عشري بحد أقصى رقمين عشريين",
                         },
                       ]}
                     >
                       <Input
-                        placeholder="أدخل درجة الشهادة"
+                        placeholder="أدخل اجمالي الدرجات"
                         size="large"
                         allowClear
                       />
                     </Form.Item>
                   </Col>
 
-                  {/* Year */}
+                  {/* النسبة المئوية للشهادة (percentage) */}
+                  <Col xs={24} md={12}>
+                    <Form.Item
+                      label="النسبة المئوية للشهادة (%)"
+                      name="certificate_percentage"
+                    >
+                      <Input
+                        placeholder="تحسب تلقائياً"
+                        size="large"
+                        suffix="%"
+                        disabled
+                      />
+                    </Form.Item>
+                  </Col>
+
+                  {/* السنة */}
                   <Col xs={24} md={12}>
                     <Form.Item
                       label="السنة"
@@ -556,8 +577,8 @@ const RegistrationFormPage: React.FC = () => {
                       ]}
                     >
                       <Select placeholder="اختر السنة" size="large">
-                        {Array.from({ length: 9 }, (_, i) => {
-                          const year = new Date().getFullYear() - 1 - i;
+                        {Array.from({ length: 10 }, (_, i) => {
+                          const year = new Date().getFullYear() - i;
                           return (
                             <Option key={year} value={year}>
                               {year}
@@ -569,8 +590,8 @@ const RegistrationFormPage: React.FC = () => {
                   </Col>
                 </Row>
 
-                {/* PREFERENCES SECTION */}
-                <Preferences selectedDivision={selectedDivision} />
+                {/* PREFERENCES SECTION
+                <Preferences selectedDivision={selectedDivision} /> */}
 
                 {/* INSTRUCTIONS AND ACKNOWLEDGEMENT */}
                 <FormSectionTitle title="تعليمات" />
