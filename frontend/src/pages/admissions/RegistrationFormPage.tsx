@@ -98,7 +98,7 @@ const RegistrationFormPage: React.FC = () => {
   return (
     <Layout dir="rtl" className="min-h-screen bg-gray-50">
       {/* CONTENT */}
-      <Content className="flex justify-center p-6">
+      <Content className="flex justify-center pg-4 lg:p-6">
         <div className="w-full max-w-5xl bg-white rounded-lg shadow-lg pb-8">
           {/* PAGE TITLE */}
           <Title
@@ -326,7 +326,7 @@ const RegistrationFormPage: React.FC = () => {
                     >
                       <Input
                         size="large"
-                        onChange={onNationalIdChange}
+                        onInput={onNationalIdChange}
                         allowClear
                         maxLength={14}
                       />
@@ -374,7 +374,7 @@ const RegistrationFormPage: React.FC = () => {
                   {/* Mobile Number */}
                   <Col xs={24} md={12}>
                     <Form.Item
-                      label="رقم الموبايل"
+                      label="رقم الموبايل (واتساب)"
                       name="mobile"
                       rules={[
                         {
