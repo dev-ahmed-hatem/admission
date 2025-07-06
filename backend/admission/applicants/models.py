@@ -5,6 +5,48 @@ from django.core.validators import (
     MaxValueValidator,
     EmailValidator,
 )
+import os
+import re
+
+
+def safe_folder_name(name):
+    # Remove any unsafe characters and replace spaces with underscores
+    return re.sub(r"[^\w\-]", "", name.replace(" ", "_"))
+
+
+def upload_path(instance, filename, document_name):
+    if hasattr(instance, "applicant") and instance.applicant:
+        applicant_name = safe_folder_name(instance.applicant.arabic_name)
+        applicant_id = instance.applicant.id
+    else:
+        applicant_name = safe_folder_name(instance.arabic_name)
+        applicant_id = instance.id
+
+    ext = filename.split(".")[-1]
+
+    new_filename = f"{applicant_id}_{applicant_name}_{document_name}{instance.id or ''}.{ext}"
+
+    return os.path.join(f"applicants/documents", f"{applicant_id} - {applicant_name}", new_filename)
+
+
+def certificate_file_upload_path(instance, filename):
+    return upload_path(instance, filename, "الشهادة المؤقتة")
+
+
+def national_id_upload_path(instance, filename):
+    return upload_path(instance, filename, "بطاقة الرقم القومي")
+
+
+def military_status_upload_path(instance, filename):
+    return upload_path(instance, filename, "شهادة المعاملة العسكرية")
+
+
+def internship_certificate_upload_path(instance, filename):
+    return upload_path(instance, filename, "شهادة الامتياز")
+
+
+def transcript_upload_path(instance, filename):
+    return upload_path(instance, filename, "بيان درجات")
 
 
 class Applicant(models.Model):
@@ -28,7 +70,8 @@ class Applicant(models.Model):
     DIVISION_CHOICES = [
         ("علوم الأشعة والتصوير الطبي", "علوم الأشعة والتصوير الطبي"),
         ("المختبرات الطبية", "المختبرات الطبية"),
-        ("الرعاية التنفسية / رعاية حرجة وطوارئ / تخدير ورعاية مركزية", "الرعاية التنفسية / رعاية حرجة وطوارئ / تخدير ورعاية مركزية"),
+        ("الرعاية التنفسية / رعاية حرجة وطوارئ / تخدير ورعاية مركزية",
+         "الرعاية التنفسية / رعاية حرجة وطوارئ / تخدير ورعاية مركزية"),
         ("صناعة تركيبات الأسنان", "صناعة تركيبات الأسنان"),
         ("الأجهزة الطبية الحيوية", "الأجهزة الطبية الحيوية"),
         ("البصريات", "البصريات"),
@@ -199,14 +242,6 @@ class Applicant(models.Model):
 
     status = models.CharField(max_length=12, choices=APPLICATION_STATUS_CHOICES, default="قيد المراجعة")
 
-    preference = models.CharField(
-        max_length=50,
-        choices=PREFERENCE_CHOICES,
-        verbose_name="الرغبة",
-        blank=True,
-        null=True,
-    )
-
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name="تاريخ التسجيل",
@@ -224,3 +259,66 @@ class Applicant(models.Model):
 
     def __str__(self):
         return f"{self.arabic_name} - {self.national_id}"
+
+    # DOCUMENTS
+    certificate_file = models.FileField(
+        upload_to=certificate_file_upload_path,
+        verbose_name="صورة واضحة من الشهادة المؤقتة",
+    )
+    national_id_photo = models.FileField(
+        upload_to=national_id_upload_path,
+        verbose_name="صورة بطاقة الرقم القومي",
+    )
+    military_certificate = models.FileField(
+        upload_to=military_status_upload_path,
+        verbose_name="شهادة المعاملة العسكرية",
+    )
+    internship_certificate = models.FileField(
+        upload_to=internship_certificate_upload_path,
+        verbose_name="شهادة الامتياز",
+        null=True,
+        blank=True,
+    )
+
+    def delete(self, *args, **kwargs):
+        """
+        Override delete to remove all uploaded files
+        """
+        file_fields = [
+            self.certificate_file,
+            self.national_id_photo,
+            self.military_certificate,
+            self.internship_certificate,
+        ]
+        for file_field in file_fields:
+            if file_field and file_field.name:
+                file_field.delete(save=False)
+
+        # Delete related transcript files
+        for transcript in self.transcript_files.all():
+            transcript.delete()
+
+        super().delete(*args, **kwargs)
+
+
+class TranscriptFile(models.Model):
+    applicant = models.ForeignKey(
+        Applicant,
+        related_name="transcript_files",
+        on_delete=models.CASCADE,
+    )
+    file = models.FileField(
+        upload_to=transcript_upload_path,
+        verbose_name="صورة واضحة من بيان درجات فرقة أولى وثانية",
+    )
+
+    def delete(self, *args, **kwargs):
+        """
+        Override delete to remove the file from storage
+        """
+        if self.file and self.file.name:
+            self.file.delete(save=False)
+        super().delete(*args, **kwargs)
+
+    def __str__(self):
+        return f"Transcript file for applicant {self.applicant.id}"

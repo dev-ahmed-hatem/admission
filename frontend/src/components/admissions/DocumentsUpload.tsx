@@ -1,0 +1,140 @@
+import { Button, Col, Form, Upload, message } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import type { UploadProps } from "antd";
+
+const DocumentUploads = ({ isOptics }: { isOptics: () => boolean }) => {
+  const validateFileType = (file: File) => {
+    const isAllowed =
+      file.type === "application/pdf" || file.type.startsWith("image/");
+    if (!isAllowed) {
+      message.error("يسمح فقط برفع ملفات PDF أو صور");
+    }
+    return isAllowed;
+  };
+
+  const normFile = (e: any) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e?.fileList;
+  };
+
+  const uploadProps: UploadProps = {
+    beforeUpload: (file) => {
+      return validateFileType(file) ? false : Upload.LIST_IGNORE;
+    },
+    maxCount: 1,
+  };
+
+  const uploadPropsMulti: UploadProps = {
+    beforeUpload: (file) => {
+      return validateFileType(file) ? false : Upload.LIST_IGNORE;
+    },
+    maxCount: 2,
+  };
+
+  return (
+    <>
+      <Col xs={24} md={12}>
+        <Form.Item
+          label="صورة واضحة من بيان درجات فرقة أولى وثانية"
+          name="transcript_files"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+          rules={[
+            {
+              required: true,
+              message: "من فضلك قم برفع بيان الدرجات",
+            },
+          ]}
+        >
+          <Upload {...uploadPropsMulti} multiple listType="text">
+            <Button icon={<UploadOutlined />}>اضغط لرفع الملفات</Button>
+          </Upload>
+        </Form.Item>
+      </Col>
+
+      <Col xs={24} md={12}>
+        <Form.Item
+          label="صورة واضحة من الشهادة المؤقتة (بها الدرجة)"
+          name="certificate_file"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+          rules={[
+            {
+              required: true,
+              message: "من فضلك قم برفع الشهادة المؤقتة",
+            },
+          ]}
+        >
+          <Upload {...uploadProps} listType="text">
+            <Button icon={<UploadOutlined />}>اضغط لرفع الملفات</Button>
+          </Upload>
+        </Form.Item>
+      </Col>
+
+      <Col xs={24} md={12}>
+        <Form.Item
+          label="صورة بطاقة الرقم القومي واضحة"
+          name="national_id_photo"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+          rules={[
+            {
+              required: true,
+              message: "من فضلك قم برفع بطاقة الرقم القومي",
+            },
+          ]}
+        >
+          <Upload {...uploadProps} listType="text">
+            <Button icon={<UploadOutlined />}>اضغط لرفع الملفات</Button>
+          </Upload>
+        </Form.Item>
+      </Col>
+
+      <Col xs={24} md={12}>
+        <Form.Item
+          label="شهادة المعاملة العسكرية للذكور"
+          name="military_certificate"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+          rules={[
+            {
+              required: true,
+              message: "من فضلك قم برفع شهادة المعاملة العسكرية",
+            },
+          ]}
+        >
+          <Upload {...uploadProps} listType="text">
+            <Button icon={<UploadOutlined />}>اضغط لرفع الملفات</Button>
+          </Upload>
+        </Form.Item>
+      </Col>
+
+      <Col xs={24} md={12}>
+        <Form.Item
+          label="شهادة الامتياز"
+          name="internship_certificate"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+          rules={[
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!isOptics() && (!value || value.length === 0)) {
+                  return Promise.reject("من فضلك قم برفع شهادة الامتياز");
+                }
+                return Promise.resolve();
+              },
+            }),
+          ]}
+        >
+          <Upload {...uploadProps} listType="text">
+            <Button icon={<UploadOutlined />}>اضغط لرفع الملفات</Button>
+          </Upload>
+        </Form.Item>
+      </Col>
+    </>
+  );
+};
+
+export default DocumentUploads;

@@ -25,6 +25,7 @@ import {
   INSTITUTES,
   PRIMARY_DIVISIONS,
 } from "@/types/applicants";
+import DocumentUploads from "@/components/admissions/DocumentsUpload";
 
 const { Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -57,6 +58,8 @@ const RegistrationFormPage: React.FC = () => {
     };
 
     createRequest(data);
+    console.log(data);
+    
   };
 
   const isOptics = () => {
@@ -702,6 +705,12 @@ const RegistrationFormPage: React.FC = () => {
                   )}
 
                 {/* INSTRUCTIONS AND ACKNOWLEDGEMENT */}
+
+                <FormSectionTitle title="الملفات" />
+                <Row gutter={[16, 16]}>
+                  <DocumentUploads isOptics={isOptics} />
+                </Row>
+
                 <FormSectionTitle title="تعليمات" />
 
                 <Row gutter={[16, 16]}>
