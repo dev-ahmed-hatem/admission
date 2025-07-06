@@ -20,7 +20,11 @@ import { handleServerErrors } from "@/utils/handleForm";
 import { useNotification } from "@/providers/NotificationProvider";
 import { useNavigate } from "react-router";
 import dayjs from "dayjs";
-import { ALL_DIVISIONS, INSTITUTES } from "@/types/applicants";
+import {
+  ALL_DIVISIONS,
+  INSTITUTES,
+  PRIMARY_DIVISIONS,
+} from "@/types/applicants";
 
 const { Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -677,17 +681,22 @@ const RegistrationFormPage: React.FC = () => {
                 </Row>
 
                 {/* INSTRUCTIONS AND ACKNOWLEDGEMENT */}
-                <FormSectionTitle title="الالتحاق" />
+                {selectedDivision &&
+                  !PRIMARY_DIVISIONS.includes(selectedDivision) && (
+                    <>
+                      <FormSectionTitle title="الالتحاق" />
 
-                <Row gutter={[16, 16]}>
-                  <Col xs={24}>
-                    <div className="bg-gray-100 p-4 rounded-lg border text-right">
-                      <p className="text-gray-700">
-                        سيتم الحاق الطالب بالمستوى الأول
-                      </p>
-                    </div>
-                  </Col>
-                </Row>
+                      <Row gutter={[16, 16]}>
+                        <Col xs={24}>
+                          <div className="bg-gray-100 p-4 rounded-lg border text-right">
+                            <p className="text-gray-700">
+                              سيتم الحاق الطالب بالمستوى الأول
+                            </p>
+                          </div>
+                        </Col>
+                      </Row>
+                    </>
+                  )}
 
                 {/* INSTRUCTIONS AND ACKNOWLEDGEMENT */}
                 <FormSectionTitle title="تعليمات" />
