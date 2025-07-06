@@ -20,17 +20,25 @@ import { handleServerErrors } from "@/utils/handleForm";
 import { useNotification } from "@/providers/NotificationProvider";
 import { useNavigate } from "react-router";
 import dayjs from "dayjs";
-import Preference from "./Preference";
-import { ALL_DIVISIONS } from "@/types/applicants";
+import { ALL_DIVISIONS, INSTITUTES } from "@/types/applicants";
 
 const { Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
 const { Option } = Select;
 
+const DIVISION_OPTIONS: Record<string, string[]> = {
+  "معهد بصريات": ["البصريات"],
+  "معهد فني صحي أزهر": ["المختبرات الطبية", "تسجيل طبي وإحصاء"],
+  "معهد فني صحي حكومي": ALL_DIVISIONS,
+};
+
 const RegistrationFormPage: React.FC = () => {
   const [form] = Form.useForm();
   const notification = useNotification();
   const navigate = useNavigate();
+  const [selectedInstitute, setSelectedInstitute] = useState<
+    (typeof INSTITUTES)[number] | null
+  >(null);
   const [selectedDivision, setSelectedDivision] = useState(null);
 
   const [
@@ -43,7 +51,7 @@ const RegistrationFormPage: React.FC = () => {
       ...values,
       birthdate: values.birthdate.format("YYYY-MM-DD"),
     };
-    
+
     createRequest(data);
   };
 
@@ -205,6 +213,25 @@ const RegistrationFormPage: React.FC = () => {
                     </Form.Item>
                   </Col>
 
+                  {/* Gender */}
+                  <Col xs={24} md={12}>
+                    <Form.Item
+                      label="النوع"
+                      name="gender"
+                      rules={[
+                        {
+                          required: true,
+                          message: "من فضلك اختر النوع",
+                        },
+                      ]}
+                    >
+                      <Select placeholder="اختر النوع" size="large">
+                        <Option value="ذكر">ذكر</Option>
+                        <Option value="أنثى">أنثى</Option>
+                      </Select>
+                    </Form.Item>
+                  </Col>
+
                   {/* Nationality */}
                   <Col xs={24} md={12}>
                     <Form.Item
@@ -223,25 +250,7 @@ const RegistrationFormPage: React.FC = () => {
                         showSearch
                       >
                         <Option value="مصر">مصر</Option>
-                      </Select>
-                    </Form.Item>
-                  </Col>
-
-                  {/* Gender */}
-                  <Col xs={24} md={12}>
-                    <Form.Item
-                      label="النوع"
-                      name="gender"
-                      rules={[
-                        {
-                          required: true,
-                          message: "من فضلك اختر النوع",
-                        },
-                      ]}
-                    >
-                      <Select placeholder="اختر النوع" size="large">
-                        <Option value="ذكر">ذكر</Option>
-                        <Option value="أنثى">أنثى</Option>
+                        <Option value="غير ذلك">غير ذلك</Option>
                       </Select>
                     </Form.Item>
                   </Col>
@@ -400,6 +409,28 @@ const RegistrationFormPage: React.FC = () => {
                     </Form.Item>
                   </Col>
 
+                  {/* Mobile2 Number */}
+                  <Col xs={24} md={12}>
+                    <Form.Item
+                      label="رقم الموبايل 2 (اختياري)"
+                      name="mobile2"
+                      rules={[
+                        {
+                          pattern: /^01[0-9]{9}$/,
+                          message:
+                            "رقم الموبايل يجب أن يبدأ بـ 01 ويتكون من 11 رقمًا",
+                        },
+                      ]}
+                    >
+                      <Input
+                        placeholder="أدخل رقم الموبايل"
+                        size="large"
+                        allowClear
+                        maxLength={11}
+                      />
+                    </Form.Item>
+                  </Col>
+
                   {/* Email */}
                   <Col xs={24} md={12}>
                     <Form.Item
@@ -423,8 +454,7 @@ const RegistrationFormPage: React.FC = () => {
                       />
                     </Form.Item>
                   </Col>
-                </Row>
-                <Row>
+
                   {/* Address */}
                   <Col xs={24} md={12}>
                     <Form.Item
@@ -454,24 +484,50 @@ const RegistrationFormPage: React.FC = () => {
                   {/* Institute */}
                   <Col xs={24} md={12}>
                     <Form.Item
-                      label="اسم المعهد"
+                      label="المعهد"
                       name="institute"
                       rules={[
                         {
                           required: true,
-                          message: "من فضلك اختر اسم المعهد",
+                          message: "من فضلك اختر المعهد",
                         },
                       ]}
                     >
-                      <Select placeholder="اختر اسم المعهد" size="large">
-                        <Option value="معهد فني صحي حكومي">
-                          معهد فني صحي حكومي
-                        </Option>
-                        <Option value="معهد فني صحي أزهر">
-                          معهد فني صحي أزهر
-                        </Option>
-                        <Option value="معهد بصريات">معهد بصريات</Option>
+                      <Select
+                        placeholder="اختر المعهد"
+                        size="large"
+                        onChange={(value) => {
+                          form.setFieldValue("division", null);
+                          form.setFieldValue("certificate_year", null);
+                          setSelectedInstitute(value);
+                        }}
+                      >
+                        {INSTITUTES.map((institute) => (
+                          <Option value={institute} key={institute}>
+                            {institute}
+                          </Option>
+                        ))}
                       </Select>
+                    </Form.Item>
+                  </Col>
+
+                  {/* Institute name */}
+                  <Col xs={24} md={12}>
+                    <Form.Item
+                      label="اسم المعهد"
+                      name="institute_name"
+                      rules={[
+                        {
+                          required: true,
+                          message: "من فضلك أدخل اسم المعهد",
+                        },
+                      ]}
+                    >
+                      <Input
+                        placeholder="أدخل اسم المعهد"
+                        size="large"
+                        allowClear
+                      />
                     </Form.Item>
                   </Col>
 
@@ -490,13 +546,50 @@ const RegistrationFormPage: React.FC = () => {
                       <Select
                         placeholder="اختر الشعبة"
                         size="large"
-                        onChange={(value) => setSelectedDivision(value)}
+                        onChange={(value) => {
+                          form.setFieldValue("certificate_year", null);
+                          setSelectedDivision(value);
+                        }}
                       >
-                        {ALL_DIVISIONS.map((division) => (
-                          <Option value={division} key={division}>
-                            {division}
-                          </Option>
-                        ))}
+                        {selectedInstitute &&
+                          DIVISION_OPTIONS[selectedInstitute]?.map(
+                            (division: string) => (
+                              <Option value={division} key={division}>
+                                {division}
+                              </Option>
+                            )
+                          )}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+
+                  {/* السنة */}
+                  <Col xs={24} md={12}>
+                    <Form.Item
+                      label="السنة"
+                      name="certificate_year"
+                      rules={[
+                        {
+                          required: true,
+                          message: "من فضلك اختر السنة",
+                        },
+                      ]}
+                    >
+                      <Select placeholder="اختر السنة" size="large">
+                        {Array.from(
+                          { length: selectedDivision === "البصريات" ? 10 : 9 },
+                          (_, i) => {
+                            const year =
+                              selectedDivision === "البصريات"
+                                ? new Date().getFullYear() - i
+                                : new Date().getFullYear() - i - 1;
+                            return (
+                              <Option key={year} value={year}>
+                                {year}
+                              </Option>
+                            );
+                          }
+                        )}
                       </Select>
                     </Form.Item>
                   </Col>
@@ -566,34 +659,35 @@ const RegistrationFormPage: React.FC = () => {
                     </Form.Item>
                   </Col>
 
-                  {/* السنة */}
+                  {/* التقدير */}
                   <Col xs={24} md={12}>
                     <Form.Item
-                      label="السنة"
-                      name="certificate_year"
+                      label="التقدير"
+                      name="grade"
                       rules={[
-                        {
-                          required: true,
-                          message: "من فضلك اختر السنة",
-                        },
+                        { required: true, message: "من فضلك اختر التقدير" },
                       ]}
                     >
-                      <Select placeholder="اختر السنة" size="large">
-                        {Array.from({ length: 10 }, (_, i) => {
-                          const year = new Date().getFullYear() - i;
-                          return (
-                            <Option key={year} value={year}>
-                              {year}
-                            </Option>
-                          );
-                        })}
+                      <Select placeholder="اختر التقدير" size="large">
+                        <Option value="جيد جدا">جيد جدا</Option>
+                        <Option value="امتياز">امتياز</Option>
                       </Select>
                     </Form.Item>
                   </Col>
                 </Row>
 
-                {/* PREFERENCES SECTION */}
-                <Preference selectedDivision={selectedDivision} />
+                {/* INSTRUCTIONS AND ACKNOWLEDGEMENT */}
+                <FormSectionTitle title="الالتحاق" />
+
+                <Row gutter={[16, 16]}>
+                  <Col xs={24}>
+                    <div className="bg-gray-100 p-4 rounded-lg border text-right">
+                      <p className="text-gray-700">
+                        سيتم الحاق الطالب بالمستوى الأول
+                      </p>
+                    </div>
+                  </Col>
+                </Row>
 
                 {/* INSTRUCTIONS AND ACKNOWLEDGEMENT */}
                 <FormSectionTitle title="تعليمات" />

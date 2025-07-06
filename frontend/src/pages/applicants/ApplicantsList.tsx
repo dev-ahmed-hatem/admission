@@ -6,7 +6,7 @@ import { tablePaginationConfig } from "../../utils/antd";
 import Loading from "@/components/Loading";
 import Error from "../Error";
 import { ColumnsType } from "antd/es/table";
-import { Applicant } from "@/types/applicants";
+import { Applicant, PRIMARY_DIVISIONS } from "@/types/applicants";
 import { useGetApplicantsQuery } from "@/app/api/endpoints/applicants";
 
 const columns: ColumnsType = [
@@ -34,15 +34,18 @@ const columns: ColumnsType = [
   },
 
   {
-    title: "المعهد",
-    dataIndex: "institute",
-    key: "institute",
+    title: "البرنامج",
+    dataIndex: "division",
+    key: "division",
     render: (institute: string) => institute,
-    // filters: [
-    //   { text: "ذكر", value: "ذكر" },
-    //   { text: "أنثى", value: "أنثى" },
-    // ],
-    // onFilter: (value, record) => record.gender === value,
+    filters: [
+      ...PRIMARY_DIVISIONS.map((division) => ({
+        text: division,
+        value: division,
+      })),
+      { text: "المستوى الأول", value: "المستوى الأول" },
+    ],
+    onFilter: (value, record) => record.division === value,
   },
 
   {

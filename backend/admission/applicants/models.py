@@ -28,7 +28,7 @@ class Applicant(models.Model):
     DIVISION_CHOICES = [
         ("علوم الأشعة والتصوير الطبي", "علوم الأشعة والتصوير الطبي"),
         ("المختبرات الطبية", "المختبرات الطبية"),
-        ("الرعاية التنفسية", "الرعاية التنفسية"),
+        ("الرعاية التنفسية / رعاية حرجة وطوارئ / تخدير ورعاية مركزية", "الرعاية التنفسية / رعاية حرجة وطوارئ / تخدير ورعاية مركزية"),
         ("صناعة تركيبات الأسنان", "صناعة تركيبات الأسنان"),
         ("الأجهزة الطبية الحيوية", "الأجهزة الطبية الحيوية"),
         ("البصريات", "البصريات"),
@@ -38,7 +38,6 @@ class Applicant(models.Model):
         ("صناعات دوائية", "صناعات دوائية"),
         ("تسجيل طبي وإحصاء", "تسجيل طبي وإحصاء"),
         ("إرشاد وتثقيف صحي", "إرشاد وتثقيف صحي"),
-        ("رعاية حرجة وطوارئ / تخدير ورعاية مركزية", "رعاية حرجة وطوارئ / تخدير ورعاية مركزية"),
     ]
 
     APPLICATION_STATUS_CHOICES = [
@@ -51,6 +50,10 @@ class Applicant(models.Model):
         ("الالتحاق بالمرحلة الأولى", "الالتحاق بالمرحلة الأولى"),
         ("تركيبات الأسنان", "تركيبات الأسنان"),
         ("تكنولوجيا البصريات", "تكنولوجيا البصريات"),
+    ]
+    GRADE_CHOICES = [
+        ("جيد جدا", "جيد جدا"),
+        ("امتياز", "امتياز"),
     ]
 
     arabic_name = models.CharField(
@@ -117,6 +120,19 @@ class Applicant(models.Model):
         ],
     )
 
+    mobile2 = models.CharField(
+        verbose_name="رقم الموبايل (2)",
+        max_length=20,
+        validators=[
+            RegexValidator(
+                regex=r"^\+?\d{10,15}$",
+                message="رقم الهاتف غير صالح"
+            )
+        ],
+        blank=True,
+        null=True,
+    )
+
     email = models.EmailField(
         verbose_name="البريد الالكتروني",
         validators=[EmailValidator()],
@@ -132,6 +148,11 @@ class Applicant(models.Model):
         verbose_name="المعهد",
         max_length=100,
         choices=INSTITUTE_CHOICES,
+    )
+
+    institute_name = models.CharField(
+        verbose_name="المعهد",
+        max_length=100,
     )
 
     division = models.CharField(
@@ -168,6 +189,12 @@ class Applicant(models.Model):
             MinValueValidator(2016),
             MaxValueValidator(2025),
         ],
+    )
+
+    grade = models.CharField(
+        max_length=20,
+        choices=GRADE_CHOICES,
+        verbose_name="التقدير",
     )
 
     status = models.CharField(max_length=12, choices=APPLICATION_STATUS_CHOICES, default="قيد المراجعة")

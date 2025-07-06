@@ -1,11 +1,15 @@
-
+export const INSTITUTES = [
+  "معهد فني صحي حكومي",
+  "معهد فني صحي أزهر",
+  "معهد بصريات",
+];
 
 export const ALL_DIVISIONS = [
   "المختبرات الطبية",
   "علوم الأشعة والتصوير الطبي",
   "الأجهزة الطبية الحيوية",
   "صناعة تركيبات الأسنان",
-  "الرعاية التنفسية",
+  "الرعاية التنفسية / رعاية حرجة وطوارئ / تخدير ورعاية مركزية",
   "البصريات",
   "عظام",
   "معاون صحي / مراقب صحي",
@@ -13,13 +17,12 @@ export const ALL_DIVISIONS = [
   "صناعات دوائية",
   "تسجيل طبي وإحصاء",
   "إرشاد وتثقيف صحي",
-  "رعاية حرجة وطوارئ / تخدير ورعاية مركزية",
 ];
 
 export const PRIMARY_DIVISIONS = [
   "علوم الأشعة والتصوير الطبي",
   "المختبرات الطبية",
-  "الرعاية التنفسية",
+  "الرعاية التنفسية / رعاية حرجة وطوارئ / تخدير ورعاية مركزية",
   "صناعة تركيبات الأسنان",
   "الأجهزة الطبية الحيوية",
   "البصريات",
@@ -40,7 +43,7 @@ export type Applicant = {
   email: string;
   address?: string;
   institute: "معهد فني صحي";
-  division: typeof ALL_DIVISIONS[number];
+  division: (typeof ALL_DIVISIONS)[number];
   certificate_percentage?: number;
   total_mark: number;
   total_out_of: number;
