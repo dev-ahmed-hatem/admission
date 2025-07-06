@@ -59,6 +59,12 @@ const RegistrationFormPage: React.FC = () => {
     createRequest(data);
   };
 
+  const isOptics = () => {
+    if (selectedDivision === "البصريات" || selectedInstitute === "معهد بصريات")
+      return true;
+    return false;
+  };
+
   useEffect(() => {
     if (isError) {
       const error = applicantError as axiosBaseQueryError;
@@ -503,6 +509,7 @@ const RegistrationFormPage: React.FC = () => {
                         onChange={(value) => {
                           form.setFieldValue("division", null);
                           form.setFieldValue("certificate_year", null);
+                          setSelectedDivision(null);
                           setSelectedInstitute(value);
                         }}
                       >
@@ -580,20 +587,16 @@ const RegistrationFormPage: React.FC = () => {
                       ]}
                     >
                       <Select placeholder="اختر السنة" size="large">
-                        {Array.from(
-                          { length: selectedDivision === "البصريات" ? 10 : 9 },
-                          (_, i) => {
-                            const year =
-                              selectedDivision === "البصريات"
-                                ? new Date().getFullYear() - i
-                                : new Date().getFullYear() - i - 1;
-                            return (
-                              <Option key={year} value={year}>
-                                {year}
-                              </Option>
-                            );
-                          }
-                        )}
+                        {Array.from({ length: isOptics() ? 10 : 9 }, (_, i) => {
+                          const year = isOptics()
+                            ? new Date().getFullYear() - i
+                            : new Date().getFullYear() - i - 1;
+                          return (
+                            <Option key={year} value={year}>
+                              {year}
+                            </Option>
+                          );
+                        })}
                       </Select>
                     </Form.Item>
                   </Col>
