@@ -20,6 +20,7 @@ import {
   useSetApplicantStatusMutation,
 } from "@/app/api/endpoints/applicants";
 import { useAppDispatch } from "@/app/redux/hooks";
+import Preferences from "@/components/applicants/Preference";
 
 const items = (applicant: Applicant) => [
   {
@@ -38,8 +39,13 @@ const items = (applicant: Applicant) => [
     children: <CertificateDetails applicant={applicant} />,
   },
   {
-    label: `الملفات`,
+    label: `الرغبة`,
     key: "4",
+    children: <Preferences applicant={applicant} />,
+  },
+  {
+    label: `الملفات`,
+    key: "5",
     // children: <Preferences applicant={applicant} />,
   },
 ];

@@ -20,7 +20,9 @@ class Applicant(models.Model):
     ]
 
     INSTITUTE_CHOICES = [
-        ("معهد فني صحي", "معهد فني صحي"),
+        ("معهد فني صحي حكومي", "معهد فني صحي حكومي"),
+        ("معهد فني صحي أزهر", "معهد فني صحي أزهر"),
+        ("معهد بصريات", "معهد بصريات"),
     ]
 
     DIVISION_CHOICES = [
@@ -30,12 +32,25 @@ class Applicant(models.Model):
         ("صناعة تركيبات الأسنان", "صناعة تركيبات الأسنان"),
         ("الأجهزة الطبية الحيوية", "الأجهزة الطبية الحيوية"),
         ("البصريات", "البصريات"),
+        ("عظام", "عظام"),
+        ("معاون صحي / مراقب صحي", "معاون صحي / مراقب صحي"),
+        ("تغذية علاجية", "تغذية علاجية"),
+        ("صناعات دوائية", "صناعات دوائية"),
+        ("تسجيل طبي وإحصاء", "تسجيل طبي وإحصاء"),
+        ("إرشاد وتثقيف صحي", "إرشاد وتثقيف صحي"),
+        ("رعاية حرجة وطوارئ / تخدير ورعاية مركزية", "رعاية حرجة وطوارئ / تخدير ورعاية مركزية"),
     ]
 
     APPLICATION_STATUS_CHOICES = [
         ("قيد المراجعة", "قيد المراجعة"),
         ("مقبول", "مقبول"),
         ("مرفوض", "مرفوض"),
+    ]
+
+    PREFERENCE_CHOICES = [
+        ("الالتحاق بالمرحلة الأولى", "الالتحاق بالمرحلة الأولى"),
+        ("تركيبات الأسنان", "تركيبات الأسنان"),
+        ("تكنولوجيا البصريات", "تكنولوجيا البصريات"),
     ]
 
     arabic_name = models.CharField(
@@ -151,11 +166,19 @@ class Applicant(models.Model):
         verbose_name="سنة الحصول على الشهادة",
         validators=[
             MinValueValidator(2016),
-            MaxValueValidator(2024),
+            MaxValueValidator(2025),
         ],
     )
 
     status = models.CharField(max_length=12, choices=APPLICATION_STATUS_CHOICES, default="قيد المراجعة")
+
+    preference = models.CharField(
+        max_length=50,
+        choices=PREFERENCE_CHOICES,
+        verbose_name="الرغبة",
+        blank=True,
+        null=True,
+    )
 
     created_at = models.DateTimeField(
         auto_now_add=True,

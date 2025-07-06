@@ -20,6 +20,8 @@ import { handleServerErrors } from "@/utils/handleForm";
 import { useNotification } from "@/providers/NotificationProvider";
 import { useNavigate } from "react-router";
 import dayjs from "dayjs";
+import Preference from "./Preference";
+import { ALL_DIVISIONS } from "@/types/applicants";
 
 const { Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -29,6 +31,7 @@ const RegistrationFormPage: React.FC = () => {
   const [form] = Form.useForm();
   const notification = useNotification();
   const navigate = useNavigate();
+  const [selectedDivision, setSelectedDivision] = useState(null);
 
   const [
     createRequest,
@@ -40,7 +43,7 @@ const RegistrationFormPage: React.FC = () => {
       ...values,
       birthdate: values.birthdate.format("YYYY-MM-DD"),
     };
-
+    
     createRequest(data);
   };
 
@@ -461,7 +464,13 @@ const RegistrationFormPage: React.FC = () => {
                       ]}
                     >
                       <Select placeholder="اختر اسم المعهد" size="large">
-                        <Option value="معهد فني صحي">معهد فني صحي</Option>
+                        <Option value="معهد فني صحي حكومي">
+                          معهد فني صحي حكومي
+                        </Option>
+                        <Option value="معهد فني صحي أزهر">
+                          معهد فني صحي أزهر
+                        </Option>
+                        <Option value="معهد بصريات">معهد بصريات</Option>
                       </Select>
                     </Form.Item>
                   </Col>
@@ -478,23 +487,16 @@ const RegistrationFormPage: React.FC = () => {
                         },
                       ]}
                     >
-                      <Select placeholder="اختر الشعبة" size="large">
-                        <Option value="علوم الأشعة والتصوير الطبي">
-                          علوم الأشعة والتصوير الطبي
-                        </Option>
-                        <Option value="المختبرات الطبية">
-                          المختبرات الطبية
-                        </Option>
-                        <Option value="الرعاية التنفسية">
-                          الرعاية التنفسية
-                        </Option>
-                        <Option value="صناعة تركيبات الأسنان">
-                          صناعة تركيبات الأسنان
-                        </Option>
-                        <Option value="الأجهزة الطبية الحيوية">
-                          الأجهزة الطبية الحيوية
-                        </Option>
-                        <Option value="البصريات">البصريات</Option>
+                      <Select
+                        placeholder="اختر الشعبة"
+                        size="large"
+                        onChange={(value) => setSelectedDivision(value)}
+                      >
+                        {ALL_DIVISIONS.map((division) => (
+                          <Option value={division} key={division}>
+                            {division}
+                          </Option>
+                        ))}
                       </Select>
                     </Form.Item>
                   </Col>
@@ -590,8 +592,8 @@ const RegistrationFormPage: React.FC = () => {
                   </Col>
                 </Row>
 
-                {/* PREFERENCES SECTION
-                <Preferences selectedDivision={selectedDivision} /> */}
+                {/* PREFERENCES SECTION */}
+                <Preference selectedDivision={selectedDivision} />
 
                 {/* INSTRUCTIONS AND ACKNOWLEDGEMENT */}
                 <FormSectionTitle title="تعليمات" />
