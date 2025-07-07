@@ -2,7 +2,13 @@ import { Button, Col, Form, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import type { UploadProps } from "antd";
 
-const DocumentUploads = ({ isOptics }: { isOptics: () => boolean }) => {
+const DocumentUploads = ({
+  isOptics,
+  setFiles,
+}: {
+  isOptics: () => boolean;
+  setFiles: Function;
+}) => {
   const validateFileType = (file: File) => {
     const isAllowed =
       file.type === "application/pdf" || file.type.startsWith("image/");
@@ -19,12 +25,18 @@ const DocumentUploads = ({ isOptics }: { isOptics: () => boolean }) => {
     return e?.fileList;
   };
 
-  const uploadProps: UploadProps = {
+  const uploadProps: (prop: string) => UploadProps = (prop: string) => ({
     beforeUpload: (file) => {
-      return validateFileType(file) ? false : Upload.LIST_IGNORE;
+      if (validateFileType(file)) {
+        setFiles((prev: any) => ({...prev, [prop]: file}))
+        return false;
+      }
+      else {
+        return Upload.LIST_IGNORE;
+      }
     },
     maxCount: 1,
-  };
+  });
 
   const uploadPropsMulti: UploadProps = {
     beforeUpload: (file) => {
@@ -67,7 +79,7 @@ const DocumentUploads = ({ isOptics }: { isOptics: () => boolean }) => {
             },
           ]}
         >
-          <Upload {...uploadProps} listType="text">
+          <Upload {...uploadProps("certificate_file")} listType="text">
             <Button icon={<UploadOutlined />}>اضغط لرفع الملفات</Button>
           </Upload>
         </Form.Item>
@@ -86,7 +98,7 @@ const DocumentUploads = ({ isOptics }: { isOptics: () => boolean }) => {
             },
           ]}
         >
-          <Upload {...uploadProps} listType="text">
+          <Upload {...uploadProps("national_id_photo")} listType="text">
             <Button icon={<UploadOutlined />}>اضغط لرفع الملفات</Button>
           </Upload>
         </Form.Item>
@@ -105,7 +117,7 @@ const DocumentUploads = ({ isOptics }: { isOptics: () => boolean }) => {
             },
           ]}
         >
-          <Upload {...uploadProps} listType="text">
+          <Upload {...uploadProps("military_certificate")} listType="text">
             <Button icon={<UploadOutlined />}>اضغط لرفع الملفات</Button>
           </Upload>
         </Form.Item>
@@ -128,7 +140,7 @@ const DocumentUploads = ({ isOptics }: { isOptics: () => boolean }) => {
             }),
           ]}
         >
-          <Upload {...uploadProps} listType="text">
+          <Upload {...uploadProps("internship_certificate")} listType="text">
             <Button icon={<UploadOutlined />}>اضغط لرفع الملفات</Button>
           </Upload>
         </Form.Item>

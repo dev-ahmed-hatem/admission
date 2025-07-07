@@ -17,16 +17,14 @@ def safe_folder_name(name):
 def upload_path(instance, filename, document_name):
     if hasattr(instance, "applicant") and instance.applicant:
         applicant_name = safe_folder_name(instance.applicant.arabic_name)
-        applicant_id = instance.applicant.id
     else:
         applicant_name = safe_folder_name(instance.arabic_name)
-        applicant_id = instance.id
 
     ext = filename.split(".")[-1]
 
-    new_filename = f"{applicant_id}_{applicant_name}_{document_name}{instance.id or ''}.{ext}"
+    new_filename = f"{applicant_name}_{document_name}{instance.id or ''}.{ext}"
 
-    return os.path.join(f"applicants/documents", f"{applicant_id} - {applicant_name}", new_filename)
+    return os.path.join(f"applicants/documents", f"{instance.national_id}", new_filename)
 
 
 def certificate_file_upload_path(instance, filename):
@@ -290,6 +288,9 @@ class Applicant(models.Model):
             self.military_certificate,
             self.internship_certificate,
         ]
+
+        applicant_directory = os.path.dirname(self.certificate_file.path)
+
         for file_field in file_fields:
             if file_field and file_field.name:
                 file_field.delete(save=False)
@@ -297,6 +298,13 @@ class Applicant(models.Model):
         # Delete related transcript files
         for transcript in self.transcript_files.all():
             transcript.delete()
+
+        # Delete applicant documents directory
+        try:
+            if applicant_directory:
+                os.rmdir(applicant_directory)
+        except Exception as e:
+            print(e)
 
         super().delete(*args, **kwargs)
 

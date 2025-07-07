@@ -41,10 +41,9 @@ const RegistrationFormPage: React.FC = () => {
   const [form] = Form.useForm();
   const notification = useNotification();
   const navigate = useNavigate();
-  const [selectedInstitute, setSelectedInstitute] = useState<
-    (typeof INSTITUTES)[number] | null
-  >(null);
+  const [selectedInstitute, setSelectedInstitute] = useState(null);
   const [selectedDivision, setSelectedDivision] = useState(null);
+  const [files, setFiles] = useState({});
 
   const [
     createRequest,
@@ -55,11 +54,13 @@ const RegistrationFormPage: React.FC = () => {
     const data = {
       ...values,
       birthdate: values.birthdate.format("YYYY-MM-DD"),
+      ...files,
     };
 
-    createRequest(data);
     console.log(data);
-    
+
+    createRequest(data);
+    // console.log(files);
   };
 
   const isOptics = () => {
@@ -708,7 +709,7 @@ const RegistrationFormPage: React.FC = () => {
 
                 <FormSectionTitle title="الملفات" />
                 <Row gutter={[16, 16]}>
-                  <DocumentUploads isOptics={isOptics} />
+                  <DocumentUploads isOptics={isOptics} setFiles={setFiles} />
                 </Row>
 
                 <FormSectionTitle title="تعليمات" />

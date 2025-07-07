@@ -10,6 +10,9 @@ export const applicantsEndpoints = api.injectEndpoints({
         url: "applicants/applicants/",
         method: "POST",
         data,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       }),
     }),
     getApplication: builder.query<Applicant, string>({
