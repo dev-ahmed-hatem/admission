@@ -28,6 +28,16 @@ export const PRIMARY_DIVISIONS = [
   "البصريات",
 ];
 
+export const ENROLLMENT = [
+  "علوم الأشعة والتصوير الطبي",
+  "المختبرات الطبية",
+  "الرعاية التنفسية / رعاية حرجة وطوارئ / تخدير ورعاية مركزية",
+  "صناعة تركيبات الأسنان",
+  "الأجهزة الطبية الحيوية",
+  "البصريات",
+  "المستوى الأول",
+];
+
 export type Applicant = {
   id: string;
   arabic_name: string;
@@ -44,6 +54,7 @@ export type Applicant = {
   address?: string;
   institute: "معهد فني صحي";
   division: (typeof ALL_DIVISIONS)[number];
+  enrollment: (typeof ENROLLMENT)[number];
   certificate_percentage?: number;
   total_mark: number;
   total_out_of: number;

@@ -19,7 +19,7 @@ import { axiosBaseQueryError } from "@/app/api/axiosBaseQuery";
 import { handleServerErrors } from "@/utils/handleForm";
 import { useNotification } from "@/providers/NotificationProvider";
 import { useNavigate } from "react-router";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import {
   ALL_DIVISIONS,
   INSTITUTES,
@@ -43,7 +43,7 @@ const RegistrationFormPage: React.FC = () => {
   const navigate = useNavigate();
   const [selectedInstitute, setSelectedInstitute] = useState(null);
   const [selectedDivision, setSelectedDivision] = useState(null);
-  const [files, setFiles] = useState({});
+  const [files, setFiles] = useState<Record<string, any>>({});
 
   const [
     createRequest,
@@ -51,16 +51,36 @@ const RegistrationFormPage: React.FC = () => {
   ] = useCreateRequestMutation();
 
   const onFinish = (values: any) => {
+    const formData = new FormData();
     const data = {
       ...values,
+      enrollment: PRIMARY_DIVISIONS.includes(selectedDivision!)? selectedDivision : "المستوى الأول",
       birthdate: values.birthdate.format("YYYY-MM-DD"),
-      ...files,
     };
 
-    console.log(data);
+    delete data["transcripts"];
 
-    createRequest(data);
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value as any);
+    });
+
+    Object.entries(files).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((file: File) => {
+          if (file instanceof File) {
+            formData.append(key, file);
+          }
+        });
+      } else if (value && value instanceof File) {
+        formData.set(key, value);
+      }
+    });
+
+    createRequest(formData);
+
     // console.log(files);
+    // console.log(data);
+    // createRequest(data);
   };
 
   const isOptics = () => {

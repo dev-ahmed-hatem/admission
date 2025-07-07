@@ -9,22 +9,24 @@ import os
 import re
 
 
-def safe_folder_name(name):
+def safe_name(name):
     # Remove any unsafe characters and replace spaces with underscores
     return re.sub(r"[^\w\-]", "", name.replace(" ", "_"))
 
 
 def upload_path(instance, filename, document_name):
     if hasattr(instance, "applicant") and instance.applicant:
-        applicant_name = safe_folder_name(instance.applicant.arabic_name)
+        applicant_name = safe_name(instance.applicant.arabic_name)
+        national_id = instance.applicant.national_id
     else:
-        applicant_name = safe_folder_name(instance.arabic_name)
+        applicant_name = safe_name(instance.arabic_name)
+        national_id = instance.national_id
 
     ext = filename.split(".")[-1]
 
     new_filename = f"{applicant_name}_{document_name}{instance.id or ''}.{ext}"
 
-    return os.path.join(f"applicants/documents", f"{instance.national_id}", new_filename)
+    return os.path.join(f"applicants/documents", f"{national_id}", new_filename)
 
 
 def certificate_file_upload_path(instance, filename):
@@ -79,6 +81,17 @@ class Applicant(models.Model):
         ("صناعات دوائية", "صناعات دوائية"),
         ("تسجيل طبي وإحصاء", "تسجيل طبي وإحصاء"),
         ("إرشاد وتثقيف صحي", "إرشاد وتثقيف صحي"),
+    ]
+
+    ENROLLMENT_CHOICES = [
+        ("علوم الأشعة والتصوير الطبي", "علوم الأشعة والتصوير الطبي"),
+        ("المختبرات الطبية", "المختبرات الطبية"),
+        ("الرعاية التنفسية / رعاية حرجة وطوارئ / تخدير ورعاية مركزية",
+         "الرعاية التنفسية / رعاية حرجة وطوارئ / تخدير ورعاية مركزية"),
+        ("صناعة تركيبات الأسنان", "صناعة تركيبات الأسنان"),
+        ("الأجهزة الطبية الحيوية", "الأجهزة الطبية الحيوية"),
+        ("البصريات", "البصريات"),
+        ("المستوى الأول", "المستوى الأول")
     ]
 
     APPLICATION_STATUS_CHOICES = [
@@ -204,6 +217,14 @@ class Applicant(models.Model):
         null=True,
     )
 
+    enrollment = models.CharField(
+        verbose_name="الالتحاق",
+        max_length=100,
+        choices=ENROLLMENT_CHOICES,
+        blank=True,
+        null=True,
+    )
+
     certificate_percentage = models.DecimalField(
         verbose_name="نسبة الشهادة",
         max_digits=5,
@@ -318,6 +339,7 @@ class TranscriptFile(models.Model):
     file = models.FileField(
         upload_to=transcript_upload_path,
         verbose_name="صورة واضحة من بيان درجات فرقة أولى وثانية",
+        blank=True
     )
 
     def delete(self, *args, **kwargs):

@@ -28,29 +28,39 @@ const DocumentUploads = ({
   const uploadProps: (prop: string) => UploadProps = (prop: string) => ({
     beforeUpload: (file) => {
       if (validateFileType(file)) {
-        setFiles((prev: any) => ({...prev, [prop]: file}))
+        setFiles((prev: any) => ({ ...prev, [prop]: file }));
         return false;
-      }
-      else {
+      } else {
         return Upload.LIST_IGNORE;
       }
     },
     maxCount: 1,
   });
 
-  const uploadPropsMulti: UploadProps = {
-    beforeUpload: (file) => {
-      return validateFileType(file) ? false : Upload.LIST_IGNORE;
+  const uploadPropsMulti: (prop: string) => UploadProps = (prop: string) => ({
+    beforeUpload: (file, fileList) => {
+      if (!validateFileType(file)) return Upload.LIST_IGNORE;
+      return false;
     },
     maxCount: 2,
-  };
+    onChange: (info) => {
+      const fileList = info.fileList.filter(
+        (file) => file.originFileObj && validateFileType(file.originFileObj)
+      );
+
+      setFiles((prev: any) => ({
+        ...prev,
+        [prop]: fileList.map((file) => file.originFileObj),
+      }));
+    },
+  });
 
   return (
     <>
       <Col xs={24} md={12}>
         <Form.Item
           label="صورة واضحة من بيان درجات فرقة أولى وثانية"
-          name="transcript_files"
+          name="transcripts"
           valuePropName="fileList"
           getValueFromEvent={normFile}
           rules={[
@@ -60,7 +70,11 @@ const DocumentUploads = ({
             },
           ]}
         >
-          <Upload {...uploadPropsMulti} multiple listType="text">
+          <Upload
+            {...uploadPropsMulti("transcripts")}
+            multiple
+            listType="text"
+          >
             <Button icon={<UploadOutlined />}>اضغط لرفع الملفات</Button>
           </Upload>
         </Form.Item>

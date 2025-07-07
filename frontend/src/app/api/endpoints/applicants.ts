@@ -13,6 +13,7 @@ export const applicantsEndpoints = api.injectEndpoints({
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        formData: true,
       }),
     }),
     getApplication: builder.query<Applicant, string>({

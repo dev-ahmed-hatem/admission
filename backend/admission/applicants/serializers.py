@@ -1,11 +1,21 @@
 from rest_framework import serializers
 from .models import Applicant, TranscriptFile
+from django.core.files.base import ContentFile
 
 
 class TranscriptFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = TranscriptFile
         fields = ['id', 'file']
+
+    def create(self, validated_data):
+        file = validated_data.pop('file')
+        if not file:
+            raise serializers.ValidationError({'file': 'لم يتم توفير الملف'})
+        instance = TranscriptFile.objects.create(**validated_data)
+        instance.file = file
+        instance.save()
+        return instance
 
 
 class ApplicantListSerializer(serializers.ModelSerializer):
@@ -23,15 +33,17 @@ class ApplicantReadSerializer(serializers.ModelSerializer):
 
 
 class ApplicantWriteSerializer(serializers.ModelSerializer):
-    # transcript_files = TranscriptFileSerializer(many=True, required=True)
+    transcripts = serializers.ListField(child=serializers.FileField(), required=False, write_only=True)
 
     class Meta:
         model = Applicant
         fields = "__all__"
 
-    def validate_transcript_files(self, value):
+    def validate_transcripts(self, value):
         if len(value) > 2:
             raise serializers.ValidationError("يمكن رفع ملفين كحد أقصى لبيان الدرجات.")
+        if not value:
+            raise serializers.ValidationError("قم برفع بيان الدرجات")
         return value
 
     def validate(self, attrs):
@@ -47,3 +59,29 @@ class ApplicantWriteSerializer(serializers.ModelSerializer):
             })
 
         return attrs
+
+    def create(self, validated_data):
+        transcripts = validated_data.pop('transcripts', [])
+
+        if not transcripts:
+            raise serializers.ValidationError({"transcripts": "قم برفع بيان الدرجات"})
+
+        applicant = Applicant.objects.create(**validated_data)
+
+        for transcript in transcripts:
+            transcript_instance = TranscriptFile.objects.create(applicant=applicant)
+
+            ext = transcript.name.split(".")[-1]
+
+            new_filename = f"{applicant.arabic_name}_بيان درجات_{transcript_instance.id}.{ext}"
+
+            # Read the file content
+            content = transcript.read()
+
+            # Create a ContentFile with the new name
+            django_file = ContentFile(content, name=new_filename)
+
+            # Save it
+            transcript_instance.file.save(transcript.name, django_file, save=True)
+
+        return applicant
