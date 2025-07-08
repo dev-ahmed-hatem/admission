@@ -271,14 +271,6 @@ class Applicant(models.Model):
         verbose_name="تاريخ آخر تعديل",
     )
 
-    class Meta:
-        verbose_name = "متقدم"
-        verbose_name_plural = "المتقدمين"
-        ordering = ["created_at"]
-
-    def __str__(self):
-        return f"{self.arabic_name} - {self.national_id}"
-
     # DOCUMENTS
     certificate_file = models.FileField(
         upload_to=certificate_file_upload_path,
@@ -298,6 +290,14 @@ class Applicant(models.Model):
         null=True,
         blank=True,
     )
+
+    class Meta:
+        verbose_name = "متقدم"
+        verbose_name_plural = "المتقدمين"
+        ordering = ["created_at"]
+
+    def __str__(self):
+        return f"{self.arabic_name} - {self.national_id}"
 
     def delete(self, *args, **kwargs):
         """
