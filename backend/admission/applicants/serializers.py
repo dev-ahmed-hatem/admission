@@ -26,10 +26,14 @@ class ApplicantListSerializer(serializers.ModelSerializer):
 
 class ApplicantReadSerializer(serializers.ModelSerializer):
     created_at = serializers.DateTimeField(format="%d/%m/%Y %H:%M", read_only=True)
+    transcript_files = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Applicant
         fields = "__all__"
+
+    def get_transcript_files(self, instance):
+        return [self.context.get("request").build_absolute_uri(file.file.url) for file in instance.transcript_files.all()]
 
 
 class ApplicantWriteSerializer(serializers.ModelSerializer):

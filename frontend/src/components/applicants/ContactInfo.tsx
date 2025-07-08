@@ -7,6 +7,9 @@ const ContactInfo = ({ applicant }: { applicant: Applicant }) => {
       <Descriptions.Item label="رقم الموبايل">
         {applicant.mobile}
       </Descriptions.Item>
+      <Descriptions.Item label="رقم الموبايل 2">
+        {applicant.mobile2 || "غير مسجل"}
+      </Descriptions.Item>
       <Descriptions.Item label="البريد الإلكتروني">
         {applicant.email}
       </Descriptions.Item>

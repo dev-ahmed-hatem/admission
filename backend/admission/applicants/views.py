@@ -3,13 +3,17 @@ from rest_framework.decorators import action, api_view, permission_classes
 from .models import Applicant
 from .serializers import ApplicantWriteSerializer, ApplicantReadSerializer
 from rest_framework import viewsets, status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 
 class ApplicantViewSet(viewsets.ModelViewSet):
     queryset = Applicant.objects.all()
-    permission_classes = (AllowAny,)
+
+    def get_permissions(self):
+        if self.action == "create":
+            return [AllowAny()]
+        return [IsAuthenticated()]
 
     def get_serializer_class(self):
         if self.action in ["create", "update", "partial_update"]:

@@ -274,7 +274,7 @@ class Applicant(models.Model):
     class Meta:
         verbose_name = "متقدم"
         verbose_name_plural = "المتقدمين"
-        ordering = ["-created_at"]
+        ordering = ["created_at"]
 
     def __str__(self):
         return f"{self.arabic_name} - {self.national_id}"

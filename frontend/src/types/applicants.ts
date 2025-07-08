@@ -50,9 +50,11 @@ export type Applicant = {
   national_id: string;
   birthdate: string;
   mobile: string;
+  mobile2?: string;
   email: string;
   address?: string;
-  institute: "معهد فني صحي";
+  institute: (typeof INSTITUTES)[number];
+  institute_name: string;
   division: (typeof ALL_DIVISIONS)[number];
   enrollment: (typeof ENROLLMENT)[number];
   certificate_percentage?: number;
@@ -66,4 +68,10 @@ export type Applicant = {
     | "تكنولوجيا البصريات";
   created_at?: string;
   updated_at?: string;
+
+  transcript_files: string[];
+  certificate_file: string;
+  national_id_photo: string;
+  military_certificate: string;
+  internship_certificate: string | null;
 };

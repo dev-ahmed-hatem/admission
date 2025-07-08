@@ -4,8 +4,11 @@ import { Descriptions } from "antd";
 const CertificateDetails = ({ applicant }: { applicant: Applicant }) => {
   return (
     <Descriptions bordered column={1} title="بيانات الشهادة">
-      <Descriptions.Item label="المعهد">
+      <Descriptions.Item label="نوع المعهد">
         {applicant.institute}
+      </Descriptions.Item>
+      <Descriptions.Item label="اسم المعهد">
+        {applicant.institute_name}
       </Descriptions.Item>
       <Descriptions.Item label="الشعبة">{applicant.division}</Descriptions.Item>
       <Descriptions.Item label="المجموع">

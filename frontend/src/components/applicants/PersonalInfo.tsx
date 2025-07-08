@@ -13,10 +13,10 @@ const PersonalInfo = ({ applicant }: { applicant: Applicant }) => {
       <Descriptions.Item label="الديانة">
         {applicant.religion}
       </Descriptions.Item>
+      <Descriptions.Item label="النوع">{applicant.gender}</Descriptions.Item>
       <Descriptions.Item label="الجنسية">
         {applicant.nationality}
       </Descriptions.Item>
-      <Descriptions.Item label="الجنس">{applicant.gender}</Descriptions.Item>
       <Descriptions.Item label="المحافظة">
         {applicant.governorate}
       </Descriptions.Item>

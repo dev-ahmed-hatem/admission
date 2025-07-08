@@ -20,7 +20,8 @@ import {
   useSetApplicantStatusMutation,
 } from "@/app/api/endpoints/applicants";
 import { useAppDispatch } from "@/app/redux/hooks";
-import Preferences from "@/components/applicants/Preference";
+import Enrollment from "@/components/applicants/Enrollment";
+import Documents from "@/components/applicants/Documents";
 
 const items = (applicant: Applicant) => [
   {
@@ -39,14 +40,14 @@ const items = (applicant: Applicant) => [
     children: <CertificateDetails applicant={applicant} />,
   },
   {
-    label: `الرغبة`,
+    label: `الالتحاق`,
     key: "4",
-    children: <Preferences applicant={applicant} />,
+    children: <Enrollment applicant={applicant} />,
   },
   {
     label: `الملفات`,
     key: "5",
-    // children: <Preferences applicant={applicant} />,
+    children: <Documents applicant={applicant} />,
   },
 ];
 
