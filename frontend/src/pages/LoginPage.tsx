@@ -1,9 +1,10 @@
 import { Form, Input, Button } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { useLoginMutation, useVerifyQuery } from "@/app/api/endpoints/auth";
-import { useNavigate, useSearchParams } from "react-router";
+import { useLoginMutation, useVerifyMutation } from "@/app/api/endpoints/auth";
+import { useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
+import { storeTokens } from "@/utils/storage";
 
 const LoginPage = () => {
   const [params] = useSearchParams();
@@ -11,11 +12,17 @@ const LoginPage = () => {
   // login flags
   const [
     login,
-    { isLoading: logging, isSuccess: logged, isError: wrongCredentials },
+    {
+      data: tokens,
+      isLoading: logging,
+      isSuccess: logged,
+      isError: wrongCredentials,
+    },
   ] = useLoginMutation();
 
   // verify flags
-  const { isLoading: verifying, isSuccess: verified } = useVerifyQuery();
+  const [verify, { isLoading: verifying, isSuccess: verified }] =
+    useVerifyMutation();
 
   const [message, setMessage] = useState<string | null>(null);
   const [form] = Form.useForm();
@@ -24,6 +31,12 @@ const LoginPage = () => {
     setMessage(null);
     login({ username: values.username, password: values.password });
   };
+
+  useEffect(() => {
+    // initial verify
+    const access = localStorage.getItem("access");
+    if (access) verify({ access });
+  }, []);
 
   useEffect(() => {
     if (wrongCredentials) {
@@ -35,6 +48,9 @@ const LoginPage = () => {
   useEffect(() => {
     const next = params.get("next");
     const path = next && next !== "/login" ? next : "/admin";
+
+    // store tokens
+    if (logged) storeTokens(tokens);
     if (logged || verified) window.location.href = path;
   }, [logged, verified]);
 
@@ -44,7 +60,11 @@ const LoginPage = () => {
       <div className="bg-white shadow-xl rounded-md overflow-hidden flex flex-col md:flex-row w-full max-w-md md:max-w-4xl">
         {/* Left: Logo */}
         <div className="md:w-1/2 max-md:h-52 bg-calypso flex items-center justify-center">
-          <img src="/logo.jpeg" alt="Logo" className="h-full md:w-full object-cover" />
+          <img
+            src="/logo.jpeg"
+            alt="Logo"
+            className="h-full md:w-full object-cover"
+          />
         </div>
 
         {/* Right: Form */}

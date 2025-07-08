@@ -139,7 +139,8 @@ AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'authentication.authentication.HTTPCookieAuthentication'
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'authentication.authentication.BaseAuthentication'
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -150,7 +151,7 @@ REST_FRAMEWORK = {
 # simple jwt:
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=3),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(hours=10),
 }
 
 # corsheaders

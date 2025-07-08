@@ -144,3 +144,5 @@ def get_authenticated_user(request):
     if is_authenticated:
         user_serialized = UserSerializer(request.user, context={"request": request}).data
         return Response(user_serialized, status=status.HTTP_200_OK)
+
+    return Response(status=status.HTTP_401_UNAUTHORIZED)

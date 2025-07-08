@@ -3,8 +3,11 @@ import api from "../apiSlice";
 
 const auth = api.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation({
-      query: (data: { username: string; password: string }) => ({
+    login: builder.mutation<
+      { access: string; refresh: string },
+      { username: string; password: string }
+    >({
+      query: (data) => ({
         url: "/auth/login/",
         method: "POST",
         data,
@@ -16,16 +19,11 @@ const auth = api.injectEndpoints({
         method: "POST",
       }),
     }),
-    verify: builder.query<void, void>({
-      query: () => ({
+    verify: builder.mutation<void, { access: string }>({
+      query: (data) => ({
         url: "/auth/verify/",
-        method: "Get",
-      }),
-    }),
-    logout: builder.mutation<void, void>({
-      query: () => ({
-        url: "/auth/logout/",
         method: "POST",
+        data: {token: data.access},
       }),
     }),
     getAuthUser: builder.query<User, void>({
@@ -38,7 +36,6 @@ const auth = api.injectEndpoints({
 export const {
   useLoginMutation,
   useRefreshMutation,
-  useVerifyQuery,
-  useLogoutMutation,
+  useVerifyMutation,
   useGetAuthUserQuery,
 } = auth;
