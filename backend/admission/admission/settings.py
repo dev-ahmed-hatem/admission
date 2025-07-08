@@ -155,7 +155,14 @@ SIMPLE_JWT = {
 }
 
 # corsheaders
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    'https://kaffo-admissions.vercel.app',
+]
+if DEBUG:
+    CORS_ALLOWED_ORIGINS.append(
+        'http://localhost:5173'
+    )
+
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'X-CSRFToken'

@@ -24,11 +24,34 @@ class ApplicantViewSet(viewsets.ModelViewSet):
         queryset = Applicant.objects.all()
         search: str = self.request.query_params.get('search', None)
 
+        status_filters = self.request.query_params.get('status', [])
+        enrollment_filters = self.request.query_params.get('enrollment', [])
+        institute_filters = self.request.query_params.get('institute', [])
+        sort_by = self.request.query_params.get('sort_by', None)
+        order = self.request.query_params.get('order', None)
+
         if search is not None:
             if search.isdigit():
                 queryset = queryset.filter(national_id__icontains=search)
             else:
                 queryset = queryset.filter(arabic_name__icontains=search)
+
+        if len(status_filters) > 0:
+            normal_status_filters = status_filters.split(',')
+            queryset = queryset.filter(status__in=normal_status_filters)
+
+        if len(enrollment_filters) > 0:
+            enrollment_filters = enrollment_filters.split(',')
+            queryset = queryset.filter(enrollment__in=enrollment_filters)
+
+        if len(institute_filters) > 0:
+            print(institute_filters)
+            normal_institute_filters = institute_filters.split(',')
+            print(normal_institute_filters)
+            queryset = queryset.filter(institute__in=normal_institute_filters)
+
+        if sort_by is not None:
+            queryset = queryset.order_by(f"{order}{sort_by}")
 
         return queryset
 

@@ -1,6 +1,4 @@
 export const storeTokens = (tokens: { access: string; refresh?: string }) => {
-  console.log(tokens);
-
   localStorage.setItem("access", tokens.access);
   if (tokens.refresh) localStorage.setItem("refresh", tokens.refresh);
 };

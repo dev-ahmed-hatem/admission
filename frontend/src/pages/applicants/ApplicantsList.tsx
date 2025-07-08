@@ -6,7 +6,7 @@ import { tablePaginationConfig } from "../../utils/antd";
 import Loading from "@/components/Loading";
 import Error from "../Error";
 import { ColumnsType } from "antd/es/table";
-import { Applicant, PRIMARY_DIVISIONS } from "@/types/applicants";
+import { Applicant, INSTITUTES, PRIMARY_DIVISIONS } from "@/types/applicants";
 import { useGetApplicantsQuery } from "@/app/api/endpoints/applicants";
 
 const columns: ColumnsType = [
@@ -30,14 +30,21 @@ const columns: ColumnsType = [
         </span>
       </Space>
     ),
-    sorter: (a, b) => a.arabic_name.localeCompare(b.arabic_name),
+    sorter: true,
   },
-
+  {
+    title: "المعهد",
+    dataIndex: "institute",
+    key: "institute",
+    filters: INSTITUTES.map((institute) => ({
+      text: institute,
+      value: institute,
+    })),
+  },
   {
     title: "البرنامج",
-    dataIndex: "division",
-    key: "division",
-    render: (institute: string) => institute,
+    dataIndex: "enrollment",
+    key: "enrollment",
     filters: [
       ...PRIMARY_DIVISIONS.map((division) => ({
         text: division,
@@ -45,9 +52,7 @@ const columns: ColumnsType = [
       })),
       { text: "المستوى الأول", value: "المستوى الأول" },
     ],
-    onFilter: (value, record) => record.division === value,
   },
-
   {
     title: "المجموع",
     dataIndex: "total_mark",
@@ -58,18 +63,13 @@ const columns: ColumnsType = [
       </span>
     ),
   },
-
   {
     title: "نسبة الشهادة",
     dataIndex: "certificate_percentage",
     key: "certificate_percentage",
     render: (value: number) => <span>{value}%</span>,
-    sorter: (a, b) =>
-      a.certificate_percentage && b.certificate_percentage
-        ? a.certificate_percentage - b.certificate_percentage
-        : 0,
+    sorter: true,
   },
-
   {
     title: "الحالة",
     dataIndex: "status",
@@ -92,7 +92,6 @@ const columns: ColumnsType = [
       { text: "مقبول", value: "مقبول" },
       { text: "مرفوض", value: "مرفوض" },
     ],
-    onFilter: (value, record) => record.status === value,
   },
 ];
 
@@ -101,22 +100,32 @@ const EmployeesList = () => {
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
+  const [controls, setControls] = useState<{
+    sort_by: string;
+    order: string;
+    filters: { division: string[]; institute: string[]; status: string[] };
+  } | null>(null);
+
   // Search Function
   const onSearch = (value: string) => {
     setSearch(value);
   };
 
   // handling applicants
-  const { data, isFetching, isError, refetch } = useGetApplicantsQuery({
-    page,
-    search,
-  });
+  const { data, isLoading, isFetching, isError, refetch } =
+    useGetApplicantsQuery({
+      page,
+      search,
+      sort_by: controls?.sort_by,
+      order: controls?.order === "descend" ? "-" : "",
+      ...controls?.filters,
+    });
 
   useEffect(() => {
     refetch();
-  }, [search, page]);
+  }, [search, page, controls]);
 
-  if (isFetching) return <Loading />;
+  if (isLoading) return <Loading />;
   if (isError) return <Error />;
   return (
     <>
@@ -149,6 +158,18 @@ const EmployeesList = () => {
           },
         })}
         bordered
+        onChange={(pagination, filters: any, sorter: any) => {
+          setControls({
+            ...(sorter.column?.key && { sort_by: sorter.column.key }),
+            ...(sorter.order && { order: sorter.order }),
+            filters: Object.fromEntries(
+              Object.entries(filters).map(([filter, values]) => [
+                filter,
+                (values as string[])?.join(),
+              ])
+            ),
+          });
+        }}
         scroll={{ x: "max-content" }}
         className="clickable-table  calypso-header"
       />
