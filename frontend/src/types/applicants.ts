@@ -75,3 +75,8 @@ export type Applicant = {
   military_certificate: string;
   internship_certificate: string | null;
 };
+
+export type HOME_STATS = {
+  status_stats: { status: string; count: number }[];
+  enrollment: { enrollment: any; count: number }[];
+};

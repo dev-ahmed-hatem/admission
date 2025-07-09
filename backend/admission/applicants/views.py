@@ -1,3 +1,4 @@
+from django.db.models import Count
 from rest_framework.decorators import action, api_view, permission_classes
 
 from .models import Applicant
@@ -45,9 +46,7 @@ class ApplicantViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(enrollment__in=enrollment_filters)
 
         if len(institute_filters) > 0:
-            print(institute_filters)
             normal_institute_filters = institute_filters.split(',')
-            print(normal_institute_filters)
             queryset = queryset.filter(institute__in=normal_institute_filters)
 
         if sort_by is not None:
@@ -83,3 +82,12 @@ def get_application(request):
             return Response({'detail': 'موظف غير موجود'}, status=status.HTTP_404_NOT_FOUND)
 
     return Response({'detail': 'الرقم القومي مطلوب'}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(["get"])
+@permission_classes([IsAuthenticated])
+def get_home_statistics(request):
+    status_stats = list(Applicant.objects.values("status").annotate(count=Count("status")))
+    status_stats.append({"status": "الكل", "count": Applicant.objects.count()})
+    enrollment = Applicant.objects.values("enrollment").annotate(count=Count("enrollment"))
+    return Response({"status_stats": status_stats, "enrollment": enrollment})

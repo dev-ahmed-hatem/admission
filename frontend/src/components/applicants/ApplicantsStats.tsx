@@ -1,36 +1,41 @@
+import { HOME_STATS } from "@/types/applicants";
 import { Column } from "@ant-design/plots";
 
-const ApplicantsStats = () => {
+const ApplicantsStats = ({
+  enrollment_stats,
+}: {
+  enrollment_stats: HOME_STATS["enrollment"];
+}) => {
   const data = [
-    { letter: "A", frequency: 8167 },
-    { letter: "B", frequency: 1492 },
-    { letter: "C", frequency: 2782 },
-    { letter: "D", frequency: 4253 },
-    { letter: "E", frequency: 12702 },
-    { letter: "F", frequency: 2288 },
-    { letter: "G", frequency: 2015 },
-    { letter: "H", frequency: 6094 },
-    { letter: "I", frequency: 6966 },
-    { letter: "J", frequency: 153 },
-    { letter: "K", frequency: 772 },
-    { letter: "L", frequency: 4025 },
+    { enrollment: "A", count: 8167 },
+    { enrollment: "B", count: 1492 },
+    { enrollment: "C", count: 2782 },
+    { enrollment: "D", count: 4253 },
+    { enrollment: "E", count: 12702 },
+    { enrollment: "F", count: 2288 },
+    { enrollment: "G", count: 2015 },
+    { enrollment: "H", count: 6094 },
+    { enrollment: "I", count: 6966 },
+    { enrollment: "J", count: 153 },
+    { enrollment: "K", count: 772 },
+    { enrollment: "L", count: 4025 },
   ];
   const config = {
-    data,
-    xField: "letter",
-    yField: "frequency",
+    data: enrollment_stats,
+    xField: "enrollment",
+    yField: "count",
     onReady: (plot: any) => {
       try {
         const container = plot.container;
         if (!container) return;
 
         const { height } = container.getBoundingClientRect();
-        const tooltipItem = data[Math.floor(Math.random() * data.length)];
+        const tooltipItem = enrollment_stats[Math.floor(Math.random() * enrollment_stats.length)];
 
         plot.on("afterrender", () => {
           plot.emit("tooltip:show", {
-            data: {
-              data: tooltipItem,
+            enrollment_stats: {
+              enrollment_stats: tooltipItem,
             },
             offsetY: height / 2 - 60,
           });
@@ -41,6 +46,6 @@ const ApplicantsStats = () => {
     },
   };
 
-  return <Column className={'text-left'} {...config} />;
+  return <Column className={"text-left"} {...config} />;
 };
 export default ApplicantsStats;

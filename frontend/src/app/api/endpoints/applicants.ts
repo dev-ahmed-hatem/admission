@@ -1,4 +1,4 @@
-import { Applicant } from "@/types/applicants";
+import { Applicant, HOME_STATS } from "@/types/applicants";
 import api from "../apiSlice";
 import { PaginatedResponse } from "@/types/paginatedResponse";
 import qs from "query-string";
@@ -46,6 +46,12 @@ export const applicantsEndpoints = api.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    getHomeStats: builder.query<HOME_STATS, void>({
+      query: () => ({
+        url: `/applicants/home-stats/`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -56,4 +62,5 @@ export const {
   useGetApplicantsQuery,
   useSetApplicantStatusMutation,
   useDeleteApplicantMutation,
+  useGetHomeStatsQuery,
 } = applicantsEndpoints;
