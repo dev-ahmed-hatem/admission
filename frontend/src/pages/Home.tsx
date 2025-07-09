@@ -12,15 +12,18 @@ const Home = () => {
   return (
     <div className="font-bold text-xl padding-container pt-10">
       <ApplicantsOverview
-        total={data?.status_stats.find((st) => st.status === "الكل")!.count!}
+        total={
+          data?.status_stats.find((st) => st.status === "الكل")?.count || 0
+        }
         under_review={
-          data?.status_stats.find((st) => st.status === "قيد المراجعة")!.count!
+          data?.status_stats.find((st) => st.status === "قيد المراجعة")
+            ?.count || 0
         }
         accepted={
-          data?.status_stats.find((st) => st.status === "مقبول")!.count!
+          data?.status_stats.find((st) => st.status === "مقبول")?.count || 0
         }
         rejected={
-          data?.status_stats.find((st) => st.status === "مرفوض")!.count!
+          data?.status_stats.find((st) => st.status === "مرفوض")?.count || 0
         }
       />
       <div className="my-16"></div>
