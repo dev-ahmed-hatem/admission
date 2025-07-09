@@ -7,6 +7,12 @@ const ApplicantsStats = ({
   enrollment_stats: HOME_STATS["enrollment"];
 }) => {
   const config = {
+    marginLeft: 10,
+
+    style: {
+      fill: "#0E6B81",
+    },
+
     data: enrollment_stats
       .filter((stat) => stat.enrollment !== null)
       .map((stat) => ({ ...stat, العدد: stat.count })),
