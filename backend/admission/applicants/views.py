@@ -1,4 +1,7 @@
+import openpyxl
+from io import BytesIO
 from django.db.models import Count
+from django.http import FileResponse
 from rest_framework.decorators import action, api_view, permission_classes
 
 from .models import Applicant
@@ -91,3 +94,44 @@ def get_home_statistics(request):
     status_stats.append({"status": "الكل", "count": Applicant.objects.count()})
     enrollment = Applicant.objects.values("enrollment").annotate(count=Count("enrollment"))
     return Response({"status_stats": status_stats, "enrollment": enrollment})
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def export_applicants_excel(request):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Applicants"
+
+    columns = [
+        ("ID", "id"),
+        ("Arabic Name", "arabic_name"),
+        ("National ID", "national_id"),
+        ("Enrollment", "enrollment"),
+        ("Status", "status"),
+        ("Birthdate", "birthdate"),
+    ]
+
+    # Header row
+    for col_num, (header, _) in enumerate(columns, 1):
+        ws.cell(row=1, column=col_num, value=header)
+
+    queryset = Applicant.objects.all()
+
+    # Write data
+    for row_num, obj in enumerate(queryset, 2):
+        for col_num, (_, field) in enumerate(columns, 1):
+            value = getattr(obj, field, "")
+            ws.cell(row=row_num, column=col_num, value=str(value))
+
+    # Save to in-memory file
+    output = BytesIO()
+    wb.save(output)
+    output.seek(0)
+
+    return FileResponse(
+        output,
+        as_attachment=True,
+        filename="applicants.xlsx",
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )

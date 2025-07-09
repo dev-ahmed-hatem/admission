@@ -8,6 +8,7 @@ import Error from "../Error";
 import { ColumnsType } from "antd/es/table";
 import { Applicant, INSTITUTES, PRIMARY_DIVISIONS } from "@/types/applicants";
 import { useGetApplicantsQuery } from "@/app/api/endpoints/applicants";
+import DownloadExcelButton from "@/components/applicants/DownloadExcelButton";
 
 const columns: ColumnsType = [
   {
@@ -140,6 +141,7 @@ const EmployeesList = () => {
           allowClear={true}
           onClear={() => setSearch("")}
         />
+        <DownloadExcelButton />
       </div>
 
       {/* Table */}

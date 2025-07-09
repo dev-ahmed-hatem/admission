@@ -52,6 +52,14 @@ export const applicantsEndpoints = api.injectEndpoints({
         method: "GET",
       }),
     }),
+    exportApplicantsExcel: builder.query<Blob, void>({
+      query: () => ({
+        url: "applicants/export-applicants/",
+        responseType: "blob",
+        method: "GET",
+        // responseHandler: (response: any) => response.blob(),
+      }),
+    }),
   }),
 });
 
@@ -63,4 +71,5 @@ export const {
   useSetApplicantStatusMutation,
   useDeleteApplicantMutation,
   useGetHomeStatsQuery,
+  useLazyExportApplicantsExcelQuery
 } = applicantsEndpoints;
