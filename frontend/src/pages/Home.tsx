@@ -44,7 +44,7 @@ const Home = () => {
       <h1 className="text-center mb-10 text-calypso-900 font-bold text-xl md:text-3xl">
         إحصائيات الطلاب في البرامج
       </h1>
-      <div className="w-full">
+      <div className="w-full md:h-lvh">
         <ApplicantsStats
           enrollment_stats={ENROLLMENT.map((en) => ({
             enrollment: en,

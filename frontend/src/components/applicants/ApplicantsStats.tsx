@@ -32,7 +32,7 @@ const ApplicantsStats = ({
             enrollment_stats: {
               enrollment_stats: tooltipItem,
             },
-            offsetY: height / 2 - 60,
+            offsetY: height - 60,
           });
         });
       } catch (e) {
@@ -41,6 +41,6 @@ const ApplicantsStats = ({
     },
   };
 
-  return <Column className={"text-left"} {...config} />;
+  return <Column className={"text-left h-full"} {...config} />;
 };
 export default ApplicantsStats;
