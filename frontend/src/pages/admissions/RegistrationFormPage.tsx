@@ -19,7 +19,7 @@ import { axiosBaseQueryError } from "@/app/api/axiosBaseQuery";
 import { handleServerErrors } from "@/utils/handleForm";
 import { useNotification } from "@/providers/NotificationProvider";
 import { useNavigate } from "react-router";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import {
   ALL_DIVISIONS,
   INSTITUTES,
@@ -54,7 +54,9 @@ const RegistrationFormPage: React.FC = () => {
     const formData = new FormData();
     const data = {
       ...values,
-      enrollment: PRIMARY_DIVISIONS.includes(selectedDivision!)? selectedDivision : "المستوى الأول",
+      enrollment: PRIMARY_DIVISIONS.includes(selectedDivision!)
+        ? selectedDivision
+        : "المستوى الأول",
       birthdate: values.birthdate.format("YYYY-MM-DD"),
     };
 
@@ -77,10 +79,6 @@ const RegistrationFormPage: React.FC = () => {
     });
 
     createRequest(formData);
-
-    // console.log(files);
-    // console.log(data);
-    // createRequest(data);
   };
 
   const isOptics = () => {
@@ -112,20 +110,20 @@ const RegistrationFormPage: React.FC = () => {
     }
   }, [isSuccess]);
 
-  const onNationalIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    form.setFieldsValue({ national_id: value });
-
-    const birthDate = extractBirthdateFromNationalId(value);
-    if (birthDate) {
-      form.setFieldsValue({ birthdate: birthDate });
-    } else {
-      form.setFieldsValue({ birthdate: null });
-    }
-  };
-
+  const nationalID = Form.useWatch("national_id", form);
   const totalMark = Form.useWatch("total_mark", form);
   const totalOutOf = Form.useWatch("total_out_of", form);
+
+  useEffect(() => {
+    if (nationalID !== undefined || nationalID !== "") {
+      const birthDate = extractBirthdateFromNationalId(nationalID);
+      if (birthDate) {
+        form.setFieldsValue({ birthdate: birthDate });
+      } else {
+        form.setFieldsValue({ birthdate: null });
+      }
+    }
+  }, [nationalID, form]);
 
   useEffect(() => {
     if (totalMark && totalOutOf && Number(totalOutOf) > 0) {
@@ -200,6 +198,10 @@ const RegistrationFormPage: React.FC = () => {
                           required: true,
                           message: "من فضلك ادخل اسم الطالب باللغة العربية",
                         },
+                        {
+                          pattern: /^[\u0600-\u06FF\s]+$/,
+                          message: "يُسمح فقط بحروف اللغة العربية",
+                        },
                       ]}
                     >
                       <Input
@@ -217,6 +219,10 @@ const RegistrationFormPage: React.FC = () => {
                         {
                           required: true,
                           message: "من فضلك ادخل اسم الطالب باللغة الانجليزية",
+                        },
+                        {
+                          pattern: /^[A-Za-z\s]+$/,
+                          message: "English letters and spaces only",
                         },
                       ]}
                     >
@@ -372,7 +378,6 @@ const RegistrationFormPage: React.FC = () => {
                     >
                       <Input
                         size="large"
-                        onInput={onNationalIdChange}
                         allowClear
                         maxLength={14}
                       />
@@ -640,6 +645,31 @@ const RegistrationFormPage: React.FC = () => {
                           message:
                             "يجب إدخال رقم صحيح أو عشري بحد أقصى رقمين عشريين",
                         },
+
+                        ({ getFieldValue }) => ({
+                          validator: (rule, value) => {
+                            const total_out_of = getFieldValue("total_out_of");
+                            if (
+                              value === undefined ||
+                              total_out_of === undefined ||
+                              value === "" ||
+                              total_out_of === ""
+                            ) {
+                              return Promise.resolve();
+                            }
+                            if (
+                              Number.parseFloat(value) >
+                              Number.parseFloat(total_out_of)
+                            ) {
+                              return Promise.reject(
+                                new Error(
+                                  "لا يمكن أن يكون المجموع أكبر من اجمالي الدرجات"
+                                )
+                              );
+                            }
+                            return Promise.resolve();
+                          },
+                        }),
                       ]}
                     >
                       <Input
