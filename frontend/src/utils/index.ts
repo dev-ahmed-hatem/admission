@@ -40,6 +40,8 @@ export const extractBirthdateFromNationalId = (id: string) => {
   const month = parseInt(id.slice(3, 5), 10);
   const day = parseInt(id.slice(5, 7), 10);
 
+  // 29604191600467
+
   const fullYear =
     centuryCode === "2"
       ? 1900 + year
@@ -49,5 +51,5 @@ export const extractBirthdateFromNationalId = (id: string) => {
 
   if (!fullYear || month > 12 || day > 31) return null;
 
-  return dayjs(`${fullYear}-${month}-${day}`, "YYYY-MM-DD");
+  return dayjs(`${fullYear}-${month}-${day}`);
 };
