@@ -11,6 +11,8 @@ import {
   Col,
   Divider,
   Checkbox,
+  List,
+  Alert,
 } from "antd";
 import FormSectionTitle from "@/components/admissions/FormSectionTitle";
 import { extractBirthdateFromNationalId } from "@/utils";
@@ -18,14 +20,21 @@ import { useCreateRequestMutation } from "@/app/api/endpoints/applicants";
 import { axiosBaseQueryError } from "@/app/api/axiosBaseQuery";
 import { handleServerErrors } from "@/utils/handleForm";
 import { useNotification } from "@/providers/NotificationProvider";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import dayjs from "dayjs";
 import {
   ALL_DIVISIONS,
   INSTITUTES,
   PRIMARY_DIVISIONS,
 } from "@/types/applicants";
+
+import {
+  MailOutlined,
+  WhatsAppOutlined,
+  SendOutlined,
+} from "@ant-design/icons";
 import DocumentUploads from "@/components/admissions/DocumentsUpload";
+import { admissionConditions, admissionsNotes } from "./AdmissionsHome";
 
 const { Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -33,7 +42,7 @@ const { Option } = Select;
 
 const DIVISION_OPTIONS: Record<string, string[]> = {
   "معهد بصريات": ["البصريات"],
-  "معهد فني صحي أزهر": ["المختبرات الطبية", "تسجيل طبي وإحصاء"],
+  "معهد فني صحي أزهر": ["البيولوجيا الحيوية", "تسجيل طبي وإحصاء"],
   "معهد فني صحي حكومي": ALL_DIVISIONS,
 };
 
@@ -54,9 +63,12 @@ const RegistrationFormPage: React.FC = () => {
     const formData = new FormData();
     const data = {
       ...values,
-      enrollment: PRIMARY_DIVISIONS.includes(selectedDivision!)
-        ? selectedDivision
-        : "المستوى الأول",
+      enrollment:
+        selectedDivision === "البيولوجيا الحيوية"
+          ? "المختبرات الطبية"
+          : PRIMARY_DIVISIONS.includes(selectedDivision!)
+          ? selectedDivision
+          : "المستوى الأول",
       birthdate: values.birthdate.format("YYYY-MM-DD"),
     };
 
@@ -159,9 +171,21 @@ const RegistrationFormPage: React.FC = () => {
               >
                 شروط الالتحاق
               </Title>
-              <Paragraph className="text-gray-700 text-center">
-                <Text>— هنا توضع شروط الالتحاق —</Text>
-              </Paragraph>
+
+              <div className="bg-gray-100 p-4 rounded-lg border text-right">
+                <Paragraph className="text-gray-700">
+                  <List
+                    dataSource={admissionConditions}
+                    renderItem={(item, index) => (
+                      <List.Item className="border-none p-0">
+                        <Text className="text-gray-700 text-base">
+                          {index + 1}. {item}
+                        </Text>
+                      </List.Item>
+                    )}
+                  />
+                </Paragraph>
+              </div>
             </section>
 
             {/* NOTES SECTION */}
@@ -172,9 +196,21 @@ const RegistrationFormPage: React.FC = () => {
               >
                 ملاحظات
               </Title>
-              <Paragraph className="text-gray-700 text-center">
-                <Text>— هنا توضع الملاحظات —</Text>
-              </Paragraph>
+
+              <div className="bg-gray-100 p-4 rounded-lg border text-right">
+                <Paragraph className="text-gray-700">
+                  <List
+                    dataSource={admissionsNotes}
+                    renderItem={(item, index) => (
+                      <List.Item className="border-none p-0">
+                        <Text className="text-gray-700 text-base">
+                          {index + 1}. {item}
+                        </Text>
+                      </List.Item>
+                    )}
+                  />
+                </Paragraph>
+              </div>
             </section>
 
             {/* FORM SECTION */}
@@ -290,6 +326,28 @@ const RegistrationFormPage: React.FC = () => {
                         showSearch
                       >
                         <Option value="مصر">مصر</Option>
+                      </Select>
+                    </Form.Item>
+                  </Col>
+
+                  {/* Place of Birth */}
+                  <Col xs={24} md={12}>
+                    <Form.Item
+                      label="محل الميلاد"
+                      name="place_of_birth"
+                      rules={[
+                        {
+                          required: true,
+                          message: "من فضلك اختر محل الميلاد",
+                        },
+                      ]}
+                    >
+                      <Select
+                        placeholder="اختر محل الميلاد"
+                        size="large"
+                        showSearch
+                      >
+                        <Option value="مصر">مصر</Option>
                         <Option value="غير ذلك">غير ذلك</Option>
                       </Select>
                     </Form.Item>
@@ -376,11 +434,7 @@ const RegistrationFormPage: React.FC = () => {
                         },
                       ]}
                     >
-                      <Input
-                        size="large"
-                        allowClear
-                        maxLength={14}
-                      />
+                      <Input size="large" allowClear maxLength={14} />
                     </Form.Item>
                   </Col>
                   <Col>
@@ -616,10 +670,8 @@ const RegistrationFormPage: React.FC = () => {
                       ]}
                     >
                       <Select placeholder="اختر السنة" size="large">
-                        {Array.from({ length: isOptics() ? 10 : 9 }, (_, i) => {
-                          const year = isOptics()
-                            ? new Date().getFullYear() - i
-                            : new Date().getFullYear() - i - 1;
+                        {Array.from({ length: 9 }, (_, i) => {
+                          const year = new Date().getFullYear() - i - 1;
                           return (
                             <Option key={year} value={year}>
                               {year}
@@ -739,7 +791,9 @@ const RegistrationFormPage: React.FC = () => {
 
                 {/* INSTRUCTIONS AND ACKNOWLEDGEMENT */}
                 {selectedDivision &&
-                  !PRIMARY_DIVISIONS.includes(selectedDivision) && (
+                  ![...PRIMARY_DIVISIONS, "البيولوجيا الحيوية"].includes(
+                    selectedDivision
+                  ) && (
                     <>
                       <FormSectionTitle title="الالتحاق" />
 
@@ -766,13 +820,47 @@ const RegistrationFormPage: React.FC = () => {
 
                 <Row gutter={[16, 16]}>
                   <Col xs={24}>
-                    <div className="bg-gray-100 p-4 rounded-lg border text-right">
-                      <p className="text-gray-700">
-                        {/* Replace this with real instructions */}
-                        هنا يتم كتابة التعليمات الخاصة بالتسجيل وإرفاق المستندات
-                        المطلوبة، يرجى قراءة جميع التعليمات بعناية قبل إرسال
-                        الطلب.
-                      </p>
+                    <div className="bg-gray-100 p-4 rounded-lg border text-right space-y-4">
+                      <Alert
+                        message="تواصل معنا للحصول على الدعم أو الاستفسارات:"
+                        description={
+                          <>
+                            <Paragraph>
+                              <SendOutlined className="ml-2 text-blue-500" />
+                              انضم إلى مجموعتنا على{" "}
+                              <Link
+                                to="https://t.me/+8KBMrE5GUbw5NWM8"
+                                target="_blank"
+                              >
+                                Telegram
+                              </Link>
+                            </Paragraph>
+
+                            <Paragraph>
+                              <WhatsAppOutlined className="ml-2 text-green-500" />
+                              واتساب:{" "}
+                              <Link
+                                to="https://wa.me/201558997887"
+                                target="_blank"
+                                style={{ direction: "ltr", textAlign: "left" }}
+                                dir="ltr"
+                              >
+                                +20 15 58997887
+                              </Link>
+                            </Paragraph>
+
+                            <Paragraph>
+                              <MailOutlined className="ml-2 text-red-500" />
+                              البريد الإلكتروني:{" "}
+                              <Link to="appliedhealthscinces@gmail.com">
+                                appliedhealthscinces@gmail.com
+                              </Link>
+                            </Paragraph>
+                          </>
+                        }
+                        type="info"
+                        showIcon
+                      />
                     </div>
                   </Col>
                 </Row>

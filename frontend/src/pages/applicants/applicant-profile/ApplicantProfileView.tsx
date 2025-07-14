@@ -124,17 +124,23 @@ const ApplicantProfileView: React.FC<{
       {/* Applicant Header */}
       <Card
         className={`shadow-lg rounded-xl ${
-          applicant?.status === "مقبول" && "border-green-600 border-x-8"
-        } ${applicant?.status === "مرفوض" && "border-red-500 border-x-8 "}`}
+          applicant?.status === "مقبول" &&
+          adminView &&
+          "border-green-600 border-x-8"
+        } ${
+          applicant?.status === "مرفوض" &&
+          adminView &&
+          "border-red-500 border-x-8 "
+        }`}
       >
         <div className="flex items-center justify-between flex-wrap gap-y-6">
           {/* Avatar with Fallback */}
           <div className="flex items-center flex-wrap gap-4">
             <Avatar
               className={`bg-calypso ${
-                applicant?.status === "مقبول" && "bg-green-600"
+                applicant?.status === "مقبول" && adminView && "bg-green-600"
               } ${
-                applicant?.status === "مرفوض" && "bg-red-500"
+                applicant?.status === "مرفوض" && adminView && "bg-red-500"
               } text-white font-semibold size-14`}
               icon={<UserOutlined />}
             >

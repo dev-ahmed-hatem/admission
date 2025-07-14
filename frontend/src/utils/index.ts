@@ -49,5 +49,5 @@ export const extractBirthdateFromNationalId = (id: string) => {
 
   if (!fullYear || month > 12 || day > 31) return null;
 
-  return dayjs(`${fullYear}-${month}-${day}`, "YYYY-MM-DD");
+  return dayjs(`${fullYear}-${month}-${day}`);
 };

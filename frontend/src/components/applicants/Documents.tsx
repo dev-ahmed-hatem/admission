@@ -139,7 +139,6 @@ const Documents = ({ applicant }: Props) => {
         open={previewOpen}
         footer={null}
         onCancel={() => setPreviewOpen(false)}
-        // width={"80%"}
         className="w-[90%] md:w-[80%]"
         style={{ top: 20 }}
         cancelButtonProps={{ color: "danger" }}
@@ -156,7 +155,9 @@ const Documents = ({ applicant }: Props) => {
         <div className="flex justify-between gap-3 flex-col md:flex-row">
           {sideContent.show && sideContent.content}
           {previewSrc && previewType === "image" && (
-            <img alt="preview" style={{ width: "100%" }} src={previewSrc} />
+            <div>
+              <img alt="preview" className=" object-contain" src={previewSrc} />
+            </div>
           )}
 
           {previewType === "pdf" && previewSrc && (

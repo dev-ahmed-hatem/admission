@@ -14,18 +14,18 @@ const AdmissionsPage: React.FC = () => {
       dir="rtl"
     >
       {/* HEADER */}
-      <Header className="padding-container flex justify-center items-center bg-orange py-4 h-20">
+      {/* <Header className="padding-container flex justify-center items-center bg-orange py-4 h-20">
         <div className="logo h-12 md:h-16">
           <Logo className="fill-calypso-900 hover:fill-calypso-950" />
         </div>
-      </Header>
+      </Header> */}
 
       {/* CONTENT */}
       {isAdmissions ? <AdmissionsHome /> : <Outlet />}
 
       {/* FOOTER */}
       <Footer className="bg-calypso-950 text-center text-white py-4 h-16 items-center flex justify-center">
-        © 2025 Menofia University – Egypt
+        © 2025 Menofia University – Egypt -  All Rights Reserved | Developed by Kaffo
       </Footer>
     </Layout>
   );

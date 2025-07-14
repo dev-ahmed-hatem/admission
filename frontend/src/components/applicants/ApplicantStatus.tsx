@@ -66,8 +66,12 @@ const ApplicantStatus = ({
       loading={isLoading}
     />
   ) : (
-    <Tag color={applicant.status === "مقبول" ? "green" : "red"}>
-      {applicant.status}
+    // <Tag color={applicant.status === "مقبول" ? "green" : "red"}>
+    //   {applicant.status}
+    // </Tag>
+
+    <Tag color="geekblue" className="text-base">
+      قيد المراجعة
     </Tag>
   );
 };

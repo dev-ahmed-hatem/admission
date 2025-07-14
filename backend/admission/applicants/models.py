@@ -75,6 +75,7 @@ class Applicant(models.Model):
         ("صناعة تركيبات الأسنان", "صناعة تركيبات الأسنان"),
         ("الأجهزة الطبية الحيوية", "الأجهزة الطبية الحيوية"),
         ("البصريات", "البصريات"),
+        ("البيولوجيا الحيوية", "البيولوجيا الحيوية"),
         ("عظام", "عظام"),
         ("معاون صحي / مراقب صحي", "معاون صحي / مراقب صحي"),
         ("تغذية علاجية", "تغذية علاجية"),
@@ -129,6 +130,13 @@ class Applicant(models.Model):
     nationality = models.CharField(
         verbose_name="بلد الجنسية",
         max_length=100,
+    )
+
+    place_of_birth = models.CharField(
+        max_length=50,
+        verbose_name="محل الميلاد",
+        null=True,
+        blank=True,
     )
 
     gender = models.CharField(

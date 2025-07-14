@@ -70,11 +70,7 @@ const DocumentUploads = ({
             },
           ]}
         >
-          <Upload
-            {...uploadPropsMulti("transcripts")}
-            multiple
-            listType="text"
-          >
+          <Upload {...uploadPropsMulti("transcripts")} multiple listType="text">
             <Button icon={<UploadOutlined />}>اضغط لرفع الملفات</Button>
           </Upload>
         </Form.Item>
@@ -125,10 +121,17 @@ const DocumentUploads = ({
           valuePropName="fileList"
           getValueFromEvent={normFile}
           rules={[
-            {
-              required: true,
-              message: "من فضلك قم برفع شهادة المعاملة العسكرية",
-            },
+            ({ getFieldValue }) => ({
+              validator: (rule, value) => {
+                if (
+                  getFieldValue("gender") === "ذكر" &&
+                  (!value || value.length === 0)
+                )
+                  return Promise.reject(
+                    "من فضلك قم برفع شهادة المعاملة العسكرية"
+                  );
+              },
+            }),
           ]}
         >
           <Upload {...uploadProps("military_certificate")} listType="text">
