@@ -61,7 +61,7 @@ const LoginPage = () => {
         {/* Left: Logo */}
         <div className="md:w-1/2 max-md:h-52 bg-calypso flex items-center justify-center">
           <img
-            src="/logo.jpeg"
+            src="/logo - full.jpeg"
             alt="Logo"
             className="h-full md:w-full object-cover"
           />

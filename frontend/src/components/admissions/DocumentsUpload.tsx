@@ -126,10 +126,12 @@ const DocumentUploads = ({
                 if (
                   getFieldValue("gender") === "ذكر" &&
                   (!value || value.length === 0)
-                )
+                ) {
                   return Promise.reject(
                     "من فضلك قم برفع شهادة المعاملة العسكرية"
                   );
+                }
+                return Promise.resolve();
               },
             }),
           ]}

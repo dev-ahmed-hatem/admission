@@ -94,8 +94,7 @@ const RegistrationFormPage: React.FC = () => {
   };
 
   const isOptics = () => {
-    if (selectedDivision === "البصريات" || selectedInstitute === "معهد بصريات")
-      return true;
+    if (selectedInstitute === "معهد بصريات") return true;
     return false;
   };
 
@@ -591,8 +590,6 @@ const RegistrationFormPage: React.FC = () => {
                         size="large"
                         onChange={(value) => {
                           form.setFieldValue("division", null);
-                          form.setFieldValue("certificate_year", null);
-                          setSelectedDivision(null);
                           setSelectedInstitute(value);
                         }}
                       >

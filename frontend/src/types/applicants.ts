@@ -44,6 +44,7 @@ export type Applicant = {
   english_name: string;
   religion: "مسلم" | "مسيحي" | "أخرى";
   nationality: string;
+  place_of_birth: string;
   gender: "ذكر" | "أنثى";
   governorate: string;
   city: string;

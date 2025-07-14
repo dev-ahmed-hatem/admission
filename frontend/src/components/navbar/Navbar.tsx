@@ -29,7 +29,7 @@ const Navbar = ({
           setMenuOpen(!menuOpen);
         }}
       />
-      <div className="logo w-12 h-12 md:h-16 overflow-hidden rounded-full">
+      <div className="logo w-12 h-12 md:h-16 md:w-16 overflow-hidden rounded-full">
         <NavLink to={"/admin"}>
           {/* <Logo className="fill-calypso-900 hover:fill-calypso-950" /> */}
           <img src="/logo.jpeg" alt="faculty logo" className="w-full h-full"/>

@@ -17,6 +17,9 @@ const PersonalInfo = ({ applicant }: { applicant: Applicant }) => {
       <Descriptions.Item label="الجنسية">
         {applicant.nationality}
       </Descriptions.Item>
+      <Descriptions.Item label="محل الميلاد">
+        {applicant.place_of_birth}
+      </Descriptions.Item>
       <Descriptions.Item label="المحافظة">
         {applicant.governorate}
       </Descriptions.Item>
