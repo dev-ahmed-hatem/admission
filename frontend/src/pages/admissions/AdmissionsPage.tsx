@@ -24,8 +24,21 @@ const AdmissionsPage: React.FC = () => {
       {isAdmissions ? <AdmissionsHome /> : <Outlet />}
 
       {/* FOOTER */}
-      <Footer className="bg-calypso-950 text-center text-white py-4 h-16 items-center flex justify-center">
-        © 2025 Menofia University – Egypt -  All Rights Reserved | Developed by Kaffo
+      <Footer className="bg-calypso-950 text-white py-6 flex flex-wrap gap-1 justify-center items-center text-center">
+        {/* <div className="flex gap-2 text-sm"> */}
+          <span>
+            ©2025 كلية تكنولوجيا العلوم الصحية التطبيقية - جامعة المنوفية - جميع
+            الحقوق محفوظة | تم التطوير بواسطة
+          </span>
+          <a
+            href="https://kaffo.co/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            Kaffo
+          </a>
+        {/* </div> */}
       </Footer>
     </Layout>
   );

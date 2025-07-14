@@ -8,8 +8,9 @@ const Footer = () => {
       justify-between items-center gap-4"
       >
         {/* Logo */}
-        <a href="https://kaffo.co">
-          <Logo className="fill-orange hover:fill-orange-200 size-40" />
+        <a href="https://kaffo.co" className="rounded-full overflow-hidden">
+          {/* <Logo className="fill-orange hover:fill-orange-200 size-40" /> */}
+          <img src="/logo.jpeg" alt="faculty logo" />
         </a>
 
         {/* Company Info */}

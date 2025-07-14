@@ -69,7 +69,7 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(original_request);
       } catch (err) {
         console.error(err);
-        // window.location.href = "/login";
+        window.location.href = "/login";
       }
     }
     return Promise.reject(error);
@@ -104,7 +104,7 @@ export const axiosBaseQuery =
     } catch (error) {
       const axiosError = error as AxiosError;
 
-      console.log(axiosError); // remove in production
+      // console.log(axiosError); // remove in production
 
       return {
         error: {

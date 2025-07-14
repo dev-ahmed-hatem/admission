@@ -30,7 +30,7 @@ const AdmissionsHome = () => {
   return (
     <Content className="flex-grow flex justify-center items-center py-6 px-2 bg-holder">
       <div className="overlay"></div>
-      <Card className="w-full max-w-xl bg-white rounded-xl shadow-2xl py-8 px-1">
+      <Card className="w-full max-w-xl bg-white rounded-xl shadow-2xl py-8">
         <div className="text-center text-2xl font-bold mb-2 flex justify-center">
           <img src="logo.jpeg" />
         </div>

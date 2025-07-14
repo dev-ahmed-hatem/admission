@@ -57,10 +57,18 @@ const Menu = ({
       <Drawer title="القائمة" onClose={onClose} open={menuOpen}>
         <NavLink
           to={"/admin"}
-          className="logo h-20 flex items-center justify-center rounded-lg mb-10"
+          className="logo flex items-center justify-center mb-10 rounded-full"
           onClick={() => setMenuOpen(false)}
         >
-          <Logo className="fill-calypso-900 hover:fill-calypso-950 h-full rounded-lg" />
+          {/* <Logo className="fill-calypso-900 hover:fill-calypso-950 h-full rounded-lg" />
+           */}
+          <span className="w-28 h-28 overflow-hidden">
+            <img
+              src="/logo.jpeg"
+              alt="faculty logo"
+              className="w-full h-full"
+            />
+          </span>
         </NavLink>
 
         <AntdMenu
