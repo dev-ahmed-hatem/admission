@@ -40,6 +40,8 @@ export const extractBirthdateFromNationalId = (id: string) => {
   const month = parseInt(id.slice(3, 5), 10);
   const day = parseInt(id.slice(5, 7), 10);
 
+  // 29604191600467
+
   const fullYear =
     centuryCode === "2"
       ? 1900 + year
