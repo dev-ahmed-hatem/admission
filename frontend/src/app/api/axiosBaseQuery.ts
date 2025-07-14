@@ -68,8 +68,9 @@ axiosInstance.interceptors.response.use(
 
         return axiosInstance(original_request);
       } catch (err) {
-        console.error(err);
-        window.location.href = "/login";
+        // console.error(err);
+        // console.log("hrer");
+        // window.location.href = "/login";
       }
     }
     return Promise.reject(error);
