@@ -1,23 +1,34 @@
 #version: "3.7"
 
 services:
-  # admission:
+  # react_frontend:
   #   build:
   #     context: .
-  #     dockerfile: ./docker/backend/Dockerfile
-  #   volumes:
-  #     - static_volume:/app/static
-  #     - media_volume:/app/media
-  #     - db_backup_volume:/app/db:rw
-  #   environment:
-  #     - DJANGO_SETTINGS_MODULE=gym_system.settings
-  #   expose:
-  #     - 8000
-  #   deploy:
-  #     replicas: 3
-  #   command: gunicorn --workers=3 --bind=0.0.0.0:8000 gym_system.wsgi:application
-  #   networks:  # nginx and backend should be on the same network
-  #     shared_network:
+  #     dockerfile: ./docker/frontend/Dockerfile
+  #   ports:
+  #     - 3000:80
+  #   networks:
+  #     - shared_network
+  #   depends_on:
+  #     - admission
+
+  admission:
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    volumes:
+      - static_volume:/app/static
+      - media_volume:/app/media
+      - db_backup_volume:/app/db:rw
+    environment:
+      - DJANGO_SETTINGS_MODULE=admission.settings
+    expose:
+      - 8000
+    deploy:
+      replicas: 3
+    command: gunicorn --workers=3 --bind=0.0.0.0:8000 admission.wsgi:application
+    networks:  # nginx and backend should be on the same network
+      shared_network:
 
   # unhash in dependant run
   nginx:
@@ -31,8 +42,9 @@ services:
     volumes:
       - static_volume:/usr/share/nginx/html/static
       - media_volume:/usr/share/nginx/html/media
-      - ./docker/nginx/certbot/conf:/etc/letsencrypt
-      - ./docker/nginx/certbot/www:/var/www/certbot
+      # - ./docker/nginx/certbot/conf:/etc/letsencrypt
+      # - ./docker/nginx/certbot/www:/var/www/certbot
+      - ./docker/nginx/ssl:/etc/nginx/ssl:ro
     depends_on:
       - admission
       # - certbot

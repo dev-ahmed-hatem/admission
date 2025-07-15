@@ -10,13 +10,13 @@ ENV DockerHOME=/app
 WORKDIR /app
 
 # Copy requirement file
-COPY ./backend/gym/gym_system/requirements.txt /app
+COPY ./backend/admission/requirements.txt /app
 
 # Install dependencies
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
 # Copy application files
-ADD --chown=django:django ./backend/gym/gym_system /app
+ADD --chown=django:django ./backend/admission /app
 
 # Collect static files
 RUN python manage.py collectstatic --noinput

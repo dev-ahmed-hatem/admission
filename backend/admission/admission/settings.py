@@ -16,9 +16,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-!9n1vr75qowg1fl3j6te@ukrvd^%)y4_m0vd_sed$olka*mt#3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['kaffoadmissions.pythonanywhere.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['kaffoadmissions.pythonanywhere.com', '127.0.0.1', 'localhost', "172.16.32.17"]
 
 # Application definition
 
@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'admission.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'db/db.sqlite3',
     }
 }
 
@@ -123,8 +123,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
-MEDIA_URL = 'media/'
+STATIC_URL = 'admission/static/'
+MEDIA_URL = 'admission/media/'
 
 STATIC_ROOT = BASE_DIR / 'static'
 MEDIA_ROOT = BASE_DIR / 'media'

@@ -3,7 +3,6 @@ import { Layout, Typography, Button, Card, List, Row, Col } from "antd";
 import { EditOutlined, LoginOutlined } from "@ant-design/icons";
 import FollowUpRequestForm from "@/components/admissions/FollowUpForm";
 import { useNavigate } from "react-router";
-import "@/styles/admissions.css";
 
 const { Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
