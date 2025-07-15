@@ -1,6 +1,7 @@
-import { Button, Col, Form, Upload, message } from "antd";
+import { Button, Col, Form, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import type { UploadProps } from "antd";
+import { useNotification } from "@/providers/NotificationProvider";
 
 const DocumentUploads = ({
   isOptics,
@@ -9,11 +10,16 @@ const DocumentUploads = ({
   isOptics: () => boolean;
   setFiles: Function;
 }) => {
+  const notification = useNotification();
+
   const validateFileType = (file: File) => {
     const isAllowed =
       file.type === "application/pdf" || file.type.startsWith("image/");
     if (!isAllowed) {
-      message.error("يسمح فقط برفع ملفات PDF أو صور");
+      notification.error({ message: "يسمح فقط برفع ملفات PDF أو صور" });
+    }
+    if (file.size > 2097152) {
+      notification.error({ message: "لا يسمح بحجم ملف أكبر من 2MB" });
     }
     return isAllowed;
   };
