@@ -28,7 +28,7 @@ const AdmissionsHome = () => {
   const navigate = useNavigate();
 
   return (
-    <Content className="flex-grow flex justify-center items-center py-6 px-2 bg-holder">
+    <Content className="flex-grow flex justify-center items-center py-6 px-2 bg-calypso-950">
       <div className="overlay"></div>
       <Card className="w-full max-w-xl bg-white rounded-xl shadow-2xl py-8">
         <div className="text-center text-2xl font-bold mb-2 flex justify-center">
