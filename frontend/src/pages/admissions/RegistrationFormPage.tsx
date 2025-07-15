@@ -817,7 +817,7 @@ const RegistrationFormPage: React.FC = () => {
 
                 <Row gutter={[16, 16]}>
                   <Col xs={24}>
-                    <div className="bg-gray-100 p-4 rounded-lg border text-right space-y-4">
+                    <div className="bg-gray-100 p-2 md:p-4 rounded-lg border text-right space-y-4">
                       <Alert
                         message="تواصل معنا للحصول على الدعم أو الاستفسارات:"
                         description={

@@ -27,11 +27,11 @@ const AdmissionsPage: React.FC = () => {
         {isAdmissions ? <AdmissionsHome /> : <Outlet />}
 
         {/* FOOTER */}
-        <Footer className="bg-calypso-950 text-white py-6 flex flex-wrap gap-1 justify-center items-center text-center">
+        <Footer className="bg-calypso-950 text-white py-6 gap-1 justify-center items-center text-center">
           {/* <div className="flex gap-2 text-sm"> */}
           <span>
             ©2025 كلية تكنولوجيا العلوم الصحية التطبيقية - جامعة المنوفية - جميع
-            الحقوق محفوظة | تم التطوير بواسطة
+            الحقوق محفوظة <br /> Powered by{" "}
           </span>
           <a
             href="https://kaffo.co/"
@@ -39,7 +39,7 @@ const AdmissionsPage: React.FC = () => {
             rel="noopener noreferrer"
             className="underline"
           >
-            Kaffo
+            Kaffo.co
           </a>
           {/* </div> */}
         </Footer>
