@@ -104,12 +104,32 @@ def export_applicants_excel(request):
     ws.title = "Applicants"
 
     columns = [
-        ("ID", "id"),
-        ("Arabic Name", "arabic_name"),
-        ("National ID", "national_id"),
-        ("Enrollment", "enrollment"),
-        ("Status", "status"),
-        ("Birthdate", "birthdate"),
+        ("الكود", "id"),
+        ("الاسم باللغة العربية", "arabic_name"),
+        ("الاسم باللغة الانجليزية", "english_name"),
+        ("الديانة", "religion"),
+        ("بلد الجنسية", "nationality"),
+        ("محل الميلاد", "place_of_birth"),
+        ("النوع", "gender"),
+        ("المحافظة", "governorate"),
+        ("المدينة", "city"),
+        ("الرقم القومي", "national_id"),
+        ("تاريخ الميلاد", "birthdate"),
+        ("رقم الموبايل", "mobile"),
+        ("رقم الموبايل (2)", "mobile2"),
+        ("البريد الالكتروني", "email"),
+        ("العنوان", "address"),
+        ("المعهد", "institute"),
+        ("اسم المعهد", "institute_name"),
+        ("الشعبة", "division"),
+        ("الالتحاق", "enrollment"),
+        ("المجموع", "total_mark"),
+        ("إجمالي الدرجات", "total_out_of"),
+        ("نسبة الشهادة", "certificate_percentage"),
+        ("سنة الحصول على الشهادة", "certificate_year"),
+        ("التقدير", "grade"),
+        ("الحالة", "status"),
+        ("تاريخ التسجيل", "created_at"),
     ]
 
     # Header row
