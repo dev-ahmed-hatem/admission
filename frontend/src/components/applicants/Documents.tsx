@@ -60,7 +60,19 @@ const Documents = ({ applicant }: Props) => {
   const handlePreview = (fileUrl: string) => {
     const ext = fileUrl?.split(".").pop()?.toLowerCase();
 
-    if (ext && ["png", "jpg", "jpeg", "gif"].includes(ext)) {
+    const imageExtensions = [
+      "png",
+      "jpg",
+      "jpeg",
+      "gif",
+      "webp",
+      "svg",
+      "bmp",
+      "tiff",
+      "heic",
+    ];
+
+    if (ext && imageExtensions.includes(ext)) {
       setPreviewType("image");
     } else if (ext === "pdf") {
       setPreviewType("pdf");
