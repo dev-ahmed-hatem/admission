@@ -18,7 +18,8 @@ SECRET_KEY = 'django-insecure-!9n1vr75qowg1fl3j6te@ukrvd^%)y4_m0vd_sed$olka*mt#3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['kaffoadmissions.pythonanywhere.com', '127.0.0.1', 'localhost', "172.16.32.17"]
+# ALLOWED_HOSTS = ['kaffoadmissions.pythonanywhere.com', '127.0.0.1', 'localhost', "172.16.32.17", "admissions.hsc.menofia.edu.eg"]
+ALLOWED_HOSTS = ['kaffoadmissions.pythonanywhere.com', "admissions.hsc.menofia.edu.eg"]
 
 # Application definition
 
@@ -169,8 +170,11 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'X-CSRFToken'
 ]
 
-# csrf
-# CSRF_TRUSTED_ORIGINS = ['http://localhost:5173', 'kaffoadmission.pythonanywhere.com']
+# csrfs
+CSRF_TRUSTED_ORIGINS = [
+    "https://admissions.hsc.menofia.edu.eg",
+    "http://admissions.hsc.menofia.edu.eg",
+]
 # CSRF_COOKIE_NAME = 'csrftoken'
 # CSRF_HEADER_NAME = 'X-CSRFToken'
 # CSRF_COOKIE_SAMESITE = 'Lax'

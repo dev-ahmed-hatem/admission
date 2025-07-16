@@ -20,6 +20,7 @@ const DocumentUploads = ({
     }
     if (file.size > 2097152) {
       notification.error({ message: "لا يسمح بحجم ملف أكبر من 2MB" });
+      return false
     }
     return isAllowed;
   };
