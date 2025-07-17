@@ -60,7 +60,10 @@ const Documents = ({ applicant }: Props) => {
   const handlePreview = (fileUrl: string) => {
     const ext = fileUrl?.split(".").pop()?.toLowerCase();
 
-    if (ext && ["png", "jpg", "jpeg", "gif"].includes(ext)) {
+    const imageExtensions = ["png", "jpg", "jpeg", "gif", "webp", "svg", "bmp", "tiff"];
+    if (ext === "heic") {
+      setPreviewType("heic");
+    } else if (ext && imageExtensions.includes(ext)) {
       setPreviewType("image");
     } else if (ext === "pdf") {
       setPreviewType("pdf");
@@ -104,18 +107,18 @@ const Documents = ({ applicant }: Props) => {
         <Descriptions.Item label="الشهادة المؤقتة">
           {applicant.certificate_file
             ? renderButton(
-                applicant.certificate_file,
-                CertificateDetails(applicant)
-              )
+              applicant.certificate_file,
+              CertificateDetails(applicant)
+            )
             : "لا يوجد"}
         </Descriptions.Item>
 
         <Descriptions.Item label="صورة بطاقة الرقم القومي">
           {applicant.national_id_photo
             ? renderButton(
-                applicant.national_id_photo,
-                PersonalDetails(applicant)
-              )
+              applicant.national_id_photo,
+              PersonalDetails(applicant)
+            )
             : "لا يوجد"}
         </Descriptions.Item>
 
@@ -128,9 +131,9 @@ const Documents = ({ applicant }: Props) => {
         <Descriptions.Item label="شهادة الامتياز">
           {applicant.internship_certificate
             ? renderButton(
-                applicant.internship_certificate,
-                CertificateDetails(applicant)
-              )
+              applicant.internship_certificate,
+              CertificateDetails(applicant)
+            )
             : "لا يوجد"}
         </Descriptions.Item>
       </Descriptions>
@@ -157,6 +160,19 @@ const Documents = ({ applicant }: Props) => {
           {previewSrc && previewType === "image" && (
             <div>
               <img alt="preview" className=" object-contain" src={previewSrc} />
+            </div>
+          )}
+
+          {previewSrc && previewType === "heic" && (
+            <div className="text-center space-y-2">
+              <p>📂 لا يمكن معاينة ملفات HEIC مباشرة.</p>
+              <a
+                href={previewSrc}
+                download
+                className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                تحميل الصورة
+              </a>
             </div>
           )}
 
