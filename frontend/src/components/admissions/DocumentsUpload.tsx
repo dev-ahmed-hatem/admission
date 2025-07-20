@@ -13,11 +13,24 @@ const DocumentUploads = ({
   const notification = useNotification();
 
   const validateFileType = (file: File) => {
-    const isAllowed =
-      file.type === "application/pdf" || file.type.startsWith("image/");
+    const allowedTypes = [
+      "application/pdf",
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+      "image/svg+xml",
+      "image/bmp",
+      "image/tiff",
+    ];
+
+    const isAllowed = allowedTypes.includes(file.type);
+
     if (!isAllowed) {
-      notification.error({ message: "يسمح فقط برفع ملفات PDF أو صور" });
+      notification.error({ message: "يسمح فقط برفع ملفات PDF أو صور قابلة للمعاينة (PNG، JPG، GIF، WebP...)" });
     }
+    
     if (file.size > 2097152) {
       notification.error({ message: "لا يسمح بحجم ملف أكبر من 2MB" });
       return false
