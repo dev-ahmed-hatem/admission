@@ -17,6 +17,7 @@ export const ALL_DIVISIONS = [
   "صناعات دوائية",
   "تسجيل طبي وإحصاء",
   "إرشاد وتثقيف صحي",
+  "خدمات طبية"
 ];
 
 export const PRIMARY_DIVISIONS = [
