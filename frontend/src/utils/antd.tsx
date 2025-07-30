@@ -1,7 +1,7 @@
 import { TablePaginationConfig } from "antd";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 
-type TablePaginationParams = {
+type TablePaginationParams = TablePaginationConfig & {
   pageSize?: number;
   total?: number;
   current?: number;
@@ -36,7 +36,6 @@ export const tablePaginationConfig: (
       إجمالي <span className="font-semibold text-black mx-1">{total}</span>{" "}
     </span>
   ),
-
   // dynamic params
   ...params,
 });

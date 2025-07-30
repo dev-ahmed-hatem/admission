@@ -99,6 +99,7 @@ const columns: ColumnsType = [
 const EmployeesList = () => {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const navigate = useNavigate();
 
   const [controls, setControls] = useState<{
@@ -117,6 +118,7 @@ const EmployeesList = () => {
     useGetApplicantsQuery({
       page,
       search,
+      page_size: pageSize,
       sort_by: controls?.sort_by,
       order: controls?.order === "descend" ? "-" : "",
       ...controls?.filters,
@@ -155,8 +157,10 @@ const EmployeesList = () => {
         pagination={tablePaginationConfig({
           total: data?.count,
           current: data?.page,
-          onChange(page) {
+          showQuickJumper: true,
+          onChange(page, pageSize) {
             setPage(page);
+            setPageSize(pageSize);
           },
         })}
         bordered

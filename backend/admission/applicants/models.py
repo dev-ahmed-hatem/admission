@@ -292,6 +292,8 @@ class Applicant(models.Model):
     military_certificate = models.FileField(
         upload_to=military_status_upload_path,
         verbose_name="شهادة المعاملة العسكرية",
+        blank=True,
+        null=True,
     )
     internship_certificate = models.FileField(
         upload_to=internship_certificate_upload_path,
