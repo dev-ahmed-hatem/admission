@@ -33,7 +33,16 @@ class ApplicantReadSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_transcript_files(self, instance):
-        return [self.context.get("request").build_absolute_uri(file.file.url) for file in instance.transcript_files.all()]
+        request = self.context.get("request")
+        files = []
+        for file in instance.transcript_files.all():
+            if file.file:  # checks if a file has been uploaded
+                try:
+                    url = request.build_absolute_uri(file.file.url)
+                    files.append(url)
+                except ValueError:
+                    continue  # Skip in case of no file associated
+        return files
 
 
 class ApplicantWriteSerializer(serializers.ModelSerializer):
