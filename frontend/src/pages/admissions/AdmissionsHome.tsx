@@ -106,7 +106,7 @@ const AdmissionsHome = () => {
         </section>
 
         <Row gutter={[16, 16]} justify="center" className="mt-8">
-          <Col xs={24} sm={12}>
+          {/* <Col xs={24} sm={12}>
             <Button
               type="primary"
               icon={<EditOutlined />}
@@ -117,7 +117,7 @@ const AdmissionsHome = () => {
             >
               تسجيل طلب التحاق جديد
             </Button>
-          </Col>
+          </Col> */}
           <Col xs={24} sm={12}>
             <Button
               type="default"

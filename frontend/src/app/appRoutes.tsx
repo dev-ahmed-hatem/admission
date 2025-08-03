@@ -9,6 +9,7 @@ import AuthProvider from "@/providers/AuthProvider";
 import AdmissionsPage from "@/pages/admissions/AdmissionsPage";
 import RegistrationFormPage from "@/pages/admissions/RegistrationFormPage";
 import ApplicantProfilePage from "@/pages/applicants/applicant-profile/ApplicantProfileView";
+import SubmissionClosedMessage from "@/pages/admissions/RegistrationClosed";
 
 export type AppRoute = RouteObject & {
   key?: string;
@@ -59,7 +60,7 @@ export const appRoutes: AppRoute[] = [
     children: [
       {
         path: "apply",
-        element: <RegistrationFormPage />,
+        element: <SubmissionClosedMessage />,
       },
       {
         path: "track-application/",
