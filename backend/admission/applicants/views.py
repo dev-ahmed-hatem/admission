@@ -103,6 +103,8 @@ def export_applicants_excel(request):
     ws = wb.active
     ws.title = "Applicants"
 
+    ws.sheet_view.rightToLeft = True
+
     columns = [
         ("الكود", "id"),
         ("الاسم باللغة العربية", "arabic_name"),
@@ -137,6 +139,35 @@ def export_applicants_excel(request):
         ws.cell(row=1, column=col_num, value=header)
 
     queryset = Applicant.objects.all()
+
+    search: str = request.query_params.get('search', None)
+
+    status_filters = request.query_params.get('status', [])
+    enrollment_filters = request.query_params.get('enrollment', [])
+    institute_filters = request.query_params.get('institute', [])
+    sort_by = request.query_params.get('sort_by', None)
+    order = request.query_params.get('order', None)
+
+    if search is not None:
+        if search.isdigit():
+            queryset = queryset.filter(national_id__icontains=search)
+        else:
+            queryset = queryset.filter(arabic_name__icontains=search)
+
+    if len(status_filters) > 0:
+        normal_status_filters = status_filters.split(',')
+        queryset = queryset.filter(status__in=normal_status_filters)
+
+    if len(enrollment_filters) > 0:
+        enrollment_filters = enrollment_filters.split(',')
+        queryset = queryset.filter(enrollment__in=enrollment_filters)
+
+    if len(institute_filters) > 0:
+        normal_institute_filters = institute_filters.split(',')
+        queryset = queryset.filter(institute__in=normal_institute_filters)
+
+    if sort_by is not None:
+        queryset = queryset.order_by(f"{order}{sort_by}")
 
     # Write data
     for row_num, obj in enumerate(queryset, 2):

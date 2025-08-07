@@ -1,9 +1,16 @@
-import { useLazyExportApplicantsExcelQuery } from "@/app/api/endpoints/applicants";
+import { ControlsType } from "@/pages/applicants/ApplicantsList";
 import { useNotification } from "@/providers/NotificationProvider";
 import { Button } from "antd";
-import { useEffect, useState } from "react";
+import queryString from "query-string";
+import { useState } from "react";
 
-const DownloadExcelButton = () => {
+const DownloadExcelButton = ({
+  search,
+  controls,
+}: {
+  search: string;
+  controls: ControlsType;
+}) => {
   const notification = useNotification();
   const [loading, setLoading] = useState(false);
 
@@ -18,7 +25,12 @@ const DownloadExcelButton = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        `${api_base_url}/applicants/export-applicants/`,
+        `${api_base_url}/applicants/export-applicants/?${queryString.stringify({
+          search,
+          sort_by: controls?.sort_by,
+          order: controls?.order === "descend" ? "-" : "",
+          ...controls?.filters,
+        })}`,
         {
           method: "GET",
           headers: {

@@ -10,6 +10,16 @@ import { Applicant, INSTITUTES, PRIMARY_DIVISIONS } from "@/types/applicants";
 import { useGetApplicantsQuery } from "@/app/api/endpoints/applicants";
 import DownloadExcelButton from "@/components/applicants/DownloadExcelButton";
 
+export type ControlsType = {
+  sort_by: string;
+  order: string;
+  filters: {
+    division: string[];
+    institute: string[];
+    status: string[];
+  };
+} | null;
+
 const columns: ColumnsType = [
   {
     title: "اسم الطالب",
@@ -102,11 +112,7 @@ const EmployeesList = () => {
   const [pageSize, setPageSize] = useState(10);
   const navigate = useNavigate();
 
-  const [controls, setControls] = useState<{
-    sort_by: string;
-    order: string;
-    filters: { division: string[]; institute: string[]; status: string[] };
-  } | null>(null);
+  const [controls, setControls] = useState<ControlsType>(null);
 
   // Search Function
   const onSearch = (value: string) => {
@@ -143,7 +149,7 @@ const EmployeesList = () => {
           allowClear={true}
           onClear={() => setSearch("")}
         />
-        <DownloadExcelButton />
+        <DownloadExcelButton search={search} controls={controls} />
       </div>
 
       {/* Table */}
