@@ -98,6 +98,7 @@ def get_home_statistics(request):
 
 @api_view(["get"])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def get_student_exam(request):
     national_id = request.GET.get("national_id")
 
@@ -150,7 +151,6 @@ def record_exam_mark(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-@authentication_classes([])
 def export_applicants_excel(request):
     wb = openpyxl.Workbook()
     ws = wb.active
