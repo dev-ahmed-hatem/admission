@@ -2,7 +2,7 @@ import openpyxl
 from io import BytesIO
 from django.db.models import Count
 from django.http import FileResponse
-from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.decorators import action, api_view, permission_classes, authentication_classes
 
 from .models import Applicant, StudentExam
 from .serializers import ApplicantWriteSerializer, ApplicantReadSerializer
@@ -134,6 +134,7 @@ def get_student_exam(request):
 
 @api_view(["post"])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def record_exam_mark(request):
     mark = request.data.get("mark", None)
     national_id = request.data.get("national_id", None)
@@ -149,6 +150,7 @@ def record_exam_mark(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
+@authentication_classes([])
 def export_applicants_excel(request):
     wb = openpyxl.Workbook()
     ws = wb.active
