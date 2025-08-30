@@ -125,7 +125,7 @@ def get_student_exam(request):
     try:
         name = Applicant.objects.get(national_id=national_id).arabic_name
     except Applicant.DoesNotExist:
-        name = None
+        name = "محمد أحمد عبد الفتاح"
 
     return Response(
         {"name": name, "national_id": national_id},

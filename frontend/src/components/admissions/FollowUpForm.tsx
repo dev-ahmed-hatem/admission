@@ -69,13 +69,12 @@ const FollowUpRequestForm: React.FC = () => {
         </Form.Item>
 
         <Row justify="center">
-          <Col xs={24} sm={12}>
+          <Col xs={24} sm={24} className="flex justify-center">
             <Button
               type="primary"
               htmlType="submit"
-              block
               size="large"
-              className="bg-calypso-700 hover:bg-calypso border-none font-bold text-white mt-4"
+              className="px-10 border-none font-bold text-white mt-4"
               loading={isLoading}
             >
               متابعة
