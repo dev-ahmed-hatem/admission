@@ -7,9 +7,11 @@ import { Navigate, RouteObject } from "react-router";
 import LoginPage from "@/pages/LoginPage";
 import AuthProvider from "@/providers/AuthProvider";
 import AdmissionsPage from "@/pages/admissions/AdmissionsPage";
-import RegistrationFormPage from "@/pages/admissions/RegistrationFormPage";
+import ExamRules from "@/pages/quiz/ExamRules";
 import ApplicantProfilePage from "@/pages/applicants/applicant-profile/ApplicantProfileView";
 import SubmissionClosedMessage from "@/pages/admissions/RegistrationClosed";
+import StudentExam from "@/pages/quiz/StudentExam";
+import ExamResult from "@/pages/quiz/ExamResult";
 
 export type AppRoute = RouteObject & {
   key?: string;
@@ -69,6 +71,18 @@ export const appRoutes: AppRoute[] = [
             <ApplicantProfilePage />
           </div>
         ),
+      },
+      {
+        path: "get-ready",
+        element: <ExamRules />,
+      },
+      {
+        path: "exam",
+        element: <StudentExam />,
+      },
+      {
+        path: "result",
+        element: <ExamResult />,
       },
     ],
   },

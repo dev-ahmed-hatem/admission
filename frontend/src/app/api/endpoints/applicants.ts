@@ -60,6 +60,22 @@ export const applicantsEndpoints = api.injectEndpoints({
         responseHandler: (response: any) => response.blob(),
       }),
     }),
+    getStudentExam: builder.query<
+      { name: string | null; national_id: string | null },
+      string
+    >({
+      query: (national_id) => ({
+        url: `applicants/student-exam/?national_id=${national_id}`,
+        method: "GET",
+      }),
+    }),
+    recordMark: builder.mutation<void, { mark: number; national_id: string }>({
+      query: (data) => ({
+        url: `applicants/record-mark/`,
+        method: "POST",
+        data,
+      }),
+    }),
   }),
 });
 
@@ -72,4 +88,6 @@ export const {
   useDeleteApplicantMutation,
   useGetHomeStatsQuery,
   useLazyExportApplicantsExcelQuery,
+  useLazyGetStudentExamQuery,
+  useRecordMarkMutation,
 } = applicantsEndpoints;

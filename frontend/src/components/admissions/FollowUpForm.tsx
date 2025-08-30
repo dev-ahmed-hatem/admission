@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { Form, Input, Button, Typography, Row, Col } from "antd";
-import { useLazyGetApplicationQuery } from "@/app/api/endpoints/applicants";
+import { Form, Input, Button, Row, Col } from "antd";
+import { useLazyGetStudentExamQuery } from "@/app/api/endpoints/applicants";
 import { axiosBaseQueryError } from "@/app/api/axiosBaseQuery";
 import { useNotification } from "@/providers/NotificationProvider";
 import { useNavigate } from "react-router";
-
-const { Title } = Typography;
+import { useAppDispatch } from "@/app/redux/hooks";
+import { setExam } from "@/app/slices/examSlice";
 
 interface FormFields {
   national_id: string;
@@ -14,42 +14,42 @@ interface FormFields {
 const FollowUpRequestForm: React.FC = () => {
   const [form] = Form.useForm<FormFields>();
   const notification = useNotification();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [
-    getApplication,
-    { data: applicant, isError, error: applicantError, isSuccess, isLoading },
-  ] = useLazyGetApplicationQuery();
+    getExam,
+    { data, isError, error: applicantError, isSuccess, isLoading },
+  ] = useLazyGetStudentExamQuery();
 
   const handleFinish = (values: { national_id: string }) => {
-    getApplication(values.national_id);
+    getExam(values.national_id);
   };
 
   useEffect(() => {
     if (isError) {
       const error = applicantError as axiosBaseQueryError;
-      if (error.status == 404) {
-        form.setFields([
-          { name: "national_id", errors: ["رقم قومي غير مسجل"] },
-        ]);
+      if (error.status === 403) {
+        dispatch(setExam({ national_id: form.getFieldValue("national_id") }));
+        navigate("result");
       } else {
-        notification.error({ message: "حدث خطأ! برجاء المحاولة لاحقا" });
+        const message = error.data.detail;
+        notification.error({
+          message: message ?? "حدث خطأ! برجاء المحاولة لاحقا",
+        });
       }
     }
   }, [isError]);
 
   useEffect(() => {
     if (isSuccess) {
-      navigate("track-application/", { state: applicant });
+      dispatch(setExam(data));
+      navigate("get-ready");
     }
   }, [isSuccess]);
 
   return (
     <div dir="rtl" className="w-full max-w-md mx-auto p-6">
-      <Title level={3} className="text-center text-calypso font-bold mb-6">
-        متابعة طلب الالتحاق
-      </Title>
-
       <Form form={form} layout="vertical" onFinish={handleFinish}>
         <Form.Item
           label="ادخل الرقم القومي"

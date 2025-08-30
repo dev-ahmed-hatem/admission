@@ -1,0 +1,132 @@
+[
+  {
+    "id": 4,
+    "question": "Body mass index (BMI) is a measurement of body",
+    "options": ["Fat", "Protein", "Water", "Salts"],
+    "answer": "Fat"
+  },
+  {
+    "id": 5,
+    "question": "Angina is a pain in",
+    "options": ["abdomen", "chest", "leg", "neck"],
+    "answer": "chest"
+  },
+  {
+    "id": 6,
+    "question": "The prefix “Ecto -” means",
+    "options": ["Inside of", "above", "below", "outside of"],
+    "answer": "outside of"
+  },
+  {
+    "id": 7,
+    "question": "The prefix “Hyper -” means",
+    "options": ["behind", "beside", "below", "above"],
+    "answer": "above"
+  },
+  {
+    "id": 8,
+    "question": "The suffix “- somnia” is related to",
+    "options": ["sleep", "pain", "death", "nutrition"],
+    "answer": "sleep"
+  },
+  {
+    "id": 9,
+    "question": "The suffix “- rrhea” means",
+    "options": ["inflammation", "painful", "fever", "discharge"],
+    "answer": "discharge"
+  },
+  {
+    "id": 10,
+    "question": "The suffix “Cardio -” is related to",
+    "options": ["heart", "chest", "abdomen", "neck"],
+    "answer": "heart"
+  },
+  {
+    "id": 11,
+    "question": "“Chronic” is a condition that",
+    "options": [
+      "starts quickly",
+      "ends quickly",
+      "ends slowly",
+      "is persistent"
+    ],
+    "answer": "is persistent"
+  },
+  {
+    "id": 12,
+    "question": "“Hypertension” means",
+    "options": [
+      "high blood pressure",
+      "low blood pressure",
+      "blood loss",
+      "blood transfusion"
+    ],
+    "answer": "high blood pressure"
+  },
+  {
+    "id": 13,
+    "question": "The root word “Lact-” is related to",
+    "options": ["urine", "water", "blood", "milk"],
+    "answer": "milk"
+  },
+  {
+    "id": 14,
+    "question": "The root word “Derma-” is related to",
+    "options": ["skin", "heart", "lung", "kidney"],
+    "answer": "skin"
+  },
+  {
+    "id": 15,
+    "question": "What is the root word that is related to the “brain”?",
+    "options": ["Gastro-", "Cardio-", "Pulmono-", "Encephalo-"],
+    "answer": "Encephalo-"
+  },
+  {
+    "id": 16,
+    "question": "What is the root word that is related to the “water”?",
+    "options": ["Gastro-", "Onco-", "Cyto-", "Aqua-"],
+    "answer": "Aqua-"
+  },
+  {
+    "id": 17,
+    "question": "What is the root word that is related to the “kidney”?",
+    "options": ["Gastro-", "Nephro-", "Pulmono-", "Encephalo-"],
+    "answer": "Nephro-"
+  },
+  {
+    "id": 18,
+    "question": "Pulse oximeter is used to measure saturation of blood",
+    "options": ["oxygen", "hydrogen", "nitrogen", "carbon dioxide"],
+    "answer": "oxygen"
+  },
+  {
+    "id": 19,
+    "question": "The function of the kidney can be replaced by",
+    "options": ["spirometer", "dialyser", "nebulizer", "ventilator"],
+    "answer": "dialyser"
+  },
+  {
+    "id": 20,
+    "question": "The eye can be examined using",
+    "options": ["otoscope", "ophthalmoscope", "stethoscope", "endoscope"],
+    "answer": "ophthalmoscope"
+  },
+  {
+    "id": 21,
+    "question": "High frequency sound waves are used in",
+    "options": ["MRI", "ultrasound", "X-ray", "CT scan"],
+    "answer": "ultrasound"
+  },
+  {
+    "id": 22,
+    "question": "Heart beats are recorded using",
+    "options": ["MRI", "ultrasound", "dialyser", "ECG"],
+    "answer": "ECG"
+  },
+  {
+    "id": 23,
+    "question": "Otoscope is used to examine the",
+    "options": ["skin", "eye", "ear", "nose"],
+    "answer": "ear"
+  }
+]

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Layout, Typography, Button, Card, List, Row, Col } from "antd";
-import { EditOutlined, LoginOutlined } from "@ant-design/icons";
+import {
+  PlayCircleOutlined,
+} from "@ant-design/icons";
 import FollowUpRequestForm from "@/components/admissions/FollowUpForm";
-import { useNavigate } from "react-router";
 
 const { Content } = Layout;
 const { Title, Paragraph, Text } = Typography;
@@ -22,9 +23,15 @@ export const admissionsNotes = [
   "أي خطأ بالبيانات مسؤوليه الطالب.",
 ];
 
+export const examNotes = [
+  "مدة الاختبار (15 دقيقة) فقط.",
+  "الاختبار متاح يوم الأحد الموافق 31 من الساعة 6:00 حتى الساعة 7:00 مساء.",
+  "يُسمح بمحاولة واحدة فقط لكل طالب.",
+  "لن يتم إعادة فتح الاختبار بعد الموعد المحدد.",
+];
+
 const AdmissionsHome = () => {
   const [showForm, setShowForm] = useState(false);
-  const navigate = useNavigate();
 
   return (
     <Content className="flex-grow flex justify-center items-center py-6 px-2 bg-calypso-950">
@@ -56,7 +63,7 @@ const AdmissionsHome = () => {
         /> */}
 
         {/* CONDITIONS SECTION */}
-        <section className="mb-8">
+        {/* <section className="mb-8">
           <Title
             level={4}
             className="text-center text-orange-500 font-bold mb-4"
@@ -78,7 +85,7 @@ const AdmissionsHome = () => {
               />
             </Paragraph>
           </div>
-        </section>
+        </section> */}
 
         {/* NOTES SECTION */}
         <section className="mb-8">
@@ -86,13 +93,13 @@ const AdmissionsHome = () => {
             level={4}
             className="text-center text-orange-500 font-bold mb-4"
           >
-            ملاحظات
+            ملاحظات اختبار تحديد المستوى
           </Title>
 
           <div className="bg-gray-100 p-4 rounded-lg border text-right">
             <Paragraph className="text-gray-700">
               <List
-                dataSource={admissionsNotes}
+                dataSource={examNotes}
                 renderItem={(item, index) => (
                   <List.Item className="border-none p-0">
                     <Text className="text-gray-700 text-base">
@@ -120,14 +127,14 @@ const AdmissionsHome = () => {
           </Col> */}
           <Col xs={24} sm={12}>
             <Button
-              type="default"
-              icon={<LoginOutlined />}
+              type="primary"
+              icon={<PlayCircleOutlined />}
               block
               size="large"
-              onClick={() => setShowForm(true)}
-              className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 rounded text-base flex items-center justify-center gap-2"
+              onClick={() => setShowForm(true)} // 👈 هنا تخليه يفتح الامتحان
+              className="bg-calypso-950 hover:bg-calypso-900 text-white font-bold py-3 rounded-xl text-lg flex items-center justify-center gap-2 shadow-md"
             >
-              متابعة طلب الالتحاق
+              الدخول إلى الاختبار
             </Button>
           </Col>
         </Row>

@@ -4,7 +4,7 @@ from django.db.models import Count
 from django.http import FileResponse
 from rest_framework.decorators import action, api_view, permission_classes
 
-from .models import Applicant
+from .models import Applicant, StudentExam
 from .serializers import ApplicantWriteSerializer, ApplicantReadSerializer
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -94,6 +94,57 @@ def get_home_statistics(request):
     status_stats.append({"status": "الكل", "count": Applicant.objects.count()})
     enrollment = Applicant.objects.values("enrollment").annotate(count=Count("enrollment"))
     return Response({"status_stats": status_stats, "enrollment": enrollment})
+
+
+@api_view(["get"])
+@permission_classes([AllowAny])
+def get_student_exam(request):
+    national_id = request.GET.get("national_id")
+
+    if not national_id:
+        return Response(
+            {"detail": "الرقم القومي مطلوب للتحقق من صلاحية الدخول إلى الاختبار."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    try:
+        student = StudentExam.objects.get(national_id=national_id)
+    except StudentExam.DoesNotExist:
+        return Response(
+            {"detail": "لم يتم العثور على طالب مسجل بهذا الرقم القومي."},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    if student.mark is not None:
+        return Response(
+            {"detail": "لا يمكن دخول الاختبار. هذا الطالب قد أنهى الاختبار مسبقاً."},
+            status=status.HTTP_403_FORBIDDEN
+        )
+
+    try:
+        name = Applicant.objects.get(national_id=national_id).arabic_name
+    except Applicant.DoesNotExist:
+        name = None
+
+    return Response(
+        {"name": name, "national_id": national_id},
+        status=status.HTTP_200_OK
+    )
+
+
+@api_view(["post"])
+@permission_classes([AllowAny])
+def record_exam_mark(request):
+    mark = request.data.get("mark", None)
+    national_id = request.data.get("national_id", None)
+    if mark is None or national_id is None:
+        return Response(
+            {"detail": "الرقم القومي والدرجة مطلوبين."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    StudentExam.objects.filter(national_id=national_id).update(mark=mark)
+    return Response(status=status.HTTP_200_OK)
 
 
 @api_view(["GET"])
