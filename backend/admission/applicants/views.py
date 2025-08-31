@@ -2,6 +2,7 @@ import openpyxl
 from io import BytesIO
 from django.db.models import Count
 from django.http import FileResponse
+from django.conf import settings
 from rest_framework.decorators import action, api_view, permission_classes, authentication_classes
 
 from .models import Applicant, StudentExam
@@ -9,6 +10,7 @@ from .serializers import ApplicantWriteSerializer, ApplicantReadSerializer
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from datetime import time, datetime
 
 
 class ApplicantViewSet(viewsets.ModelViewSet):
@@ -100,6 +102,17 @@ def get_home_statistics(request):
 @permission_classes([AllowAny])
 @authentication_classes([])
 def get_student_exam(request):
+    now = datetime.now().astimezone(settings.CAIRO_TZ).time()
+
+    start_time = time(18, 0)  # 6:00 PM
+    end_time = time(19, 0)  # 7:00 PM
+
+    if not (start_time <= now <= end_time):
+        return Response(
+            {"detail": "الاختبار غير متاح الآن. متاح فقط من 6:00 حتى 7:00 مساءً."},
+            status=status.HTTP_423_LOCKED
+        )
+
     national_id = request.GET.get("national_id")
 
     if not national_id:
@@ -125,7 +138,7 @@ def get_student_exam(request):
     try:
         name = Applicant.objects.get(national_id=national_id).arabic_name
     except Applicant.DoesNotExist:
-        name = "محمد أحمد عبد الفتاح"
+        name = None
 
     return Response(
         {"name": name, "national_id": national_id},
@@ -145,7 +158,13 @@ def record_exam_mark(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    StudentExam.objects.filter(national_id=national_id).update(mark=mark)
+    student_exam = StudentExam.objects.get(national_id=national_id)
+    if student_exam.mark is not None:
+        return Response({"detail": "لقد تم تسجيل إجاباتك من قبل"}, status=status.HTTP_409_CONFLICT)
+
+    student_exam.mark = mark
+    student_exam.save()
+
     return Response(status=status.HTTP_200_OK)
 
 

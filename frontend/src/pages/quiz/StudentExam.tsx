@@ -6,6 +6,7 @@ import { useAppSelector } from "@/app/redux/hooks";
 import { UserOutlined } from "@ant-design/icons";
 import { useRecordMarkMutation } from "@/app/api/endpoints/applicants";
 import { useNotification } from "@/providers/NotificationProvider";
+import { axiosBaseQueryError } from "@/app/api/axiosBaseQuery";
 
 const StudentExam = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const StudentExam = () => {
   const [timeExpired, setTimeExpired] = useState(false);
   const [timeUpNotification, setTimeUpNotification] = useState(false);
 
-  const [recordMark, { isLoading, isError, isSuccess }] =
+  const [recordMark, { isLoading, isError, isSuccess, error: markError }] =
     useRecordMarkMutation();
 
   const submitResult = useCallback(() => {
@@ -114,9 +115,20 @@ const StudentExam = () => {
 
   useEffect(() => {
     if (isError) {
-      notification.error({
-        message: "حدث خطأ أثناء تسجيل إجاباتك، برجاء إعادة المحاولة",
-      });
+      const error = markError as axiosBaseQueryError;
+      const message = error.data.detail ?? null;
+      if (error.status === 409) {
+        navigate("/admissions/result");
+        notification.success({
+          message:
+            message || "حدث خطأ أثناء تسجيل إجاباتك، برجاء إعادة المحاولة",
+        });
+      } else {
+        notification.error({
+          message:
+            message || "حدث خطأ أثناء تسجيل إجاباتك، برجاء إعادة المحاولة",
+        });
+      }
     }
   }, [isError]);
 
@@ -233,7 +245,8 @@ const StudentExam = () => {
             onClick={handleNext}
             type="primary"
             size="large"
-            disabled={!allAnswered || timeExpired || isLoading}
+            disabled={!allAnswered || timeExpired}
+            loading={isLoading}
           >
             {currentPage === totalPages ? "إرسال" : "التالي"}
           </Button>
