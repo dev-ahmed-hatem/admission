@@ -18,8 +18,8 @@ SECRET_KEY = 'django-insecure-!9n1vr75qowg1fl3j6te@ukrvd^%)y4_m0vd_sed$olka*mt#3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['kaffoadmissions.pythonanywhere.com', '127.0.0.1', 'localhost', "172.16.32.17", "admissions.hsc.menofia.edu.eg", "*"]
-# ALLOWED_HOSTS = ['kaffoadmissions.pythonanywhere.com', "admissions.hsc.menofia.edu.eg"]
+# ALLOWED_HOSTS = ['kaffoadmissions.pythonanywhere.com', '127.0.0.1', 'localhost', "172.16.32.17", "admissions.hsc.menofia.edu.eg", "*"]
+ALLOWED_HOSTS = ['kaffoadmissions.pythonanywhere.com', "admissions.hsc.menofia.edu.eg"]
 
 # Application definition
 
@@ -181,5 +181,5 @@ CSRF_TRUSTED_ORIGINS = [
 # CSRF_COOKIE_SECURE = True
 # CSRF_COOKIE_HTTPONLY = True
 
-# SECURE_SSL_REDIRECT = True
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

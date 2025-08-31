@@ -10,7 +10,7 @@ from .serializers import ApplicantWriteSerializer, ApplicantReadSerializer
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from datetime import time, datetime
+from datetime import date, time, datetime
 
 
 class ApplicantViewSet(viewsets.ModelViewSet):
@@ -104,10 +104,11 @@ def get_home_statistics(request):
 def get_student_exam(request):
     now = datetime.now().astimezone(settings.CAIRO_TZ).time()
 
-    start_time = time(18, 0)  # 6:00 PM
+    target_date = date(2025, 8, 31)
+    start_time = time(12, 19)  # 6:00 PM
     end_time = time(19, 0)  # 7:00 PM
 
-    if not (start_time <= now <= end_time):
+    if not (now.date() == target_date and start_time <= now <= end_time):
         return Response(
             {"detail": "الاختبار غير متاح الآن. متاح فقط من 6:00 حتى 7:00 مساءً."},
             status=status.HTTP_423_LOCKED
