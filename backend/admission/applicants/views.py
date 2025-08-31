@@ -102,13 +102,13 @@ def get_home_statistics(request):
 @permission_classes([AllowAny])
 @authentication_classes([])
 def get_student_exam(request):
-    now = datetime.now().astimezone(settings.CAIRO_TZ).time()
+    now = datetime.now().astimezone(settings.CAIRO_TZ)
 
     target_date = date(2025, 8, 31)
-    start_time = time(12, 19)  # 6:00 PM
+    start_time = time(18, 0)  # 6:00 PM
     end_time = time(19, 0)  # 7:00 PM
 
-    if not (now.date() == target_date and start_time <= now <= end_time):
+    if not (now.date() == target_date and start_time <= now.time() <= end_time):
         return Response(
             {"detail": "الاختبار غير متاح الآن. متاح فقط من 6:00 حتى 7:00 مساءً."},
             status=status.HTTP_423_LOCKED

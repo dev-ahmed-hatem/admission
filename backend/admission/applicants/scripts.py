@@ -1,4 +1,5 @@
 import pandas as pd
+from applicants.models import StudentExam
 
 # Load the Excel file
 df = pd.read_excel('./applicants/sheet.xls')  # Replace with your actual file path
@@ -22,8 +23,7 @@ print(len(applicants))
 lis = []
 for applicant in applicants:
     national_id = applicant["national_id"]
-    print(national_id)
-
+    StudentExam.objects.create(national_id=national_id)
 
 
     # if not secs.exists():
