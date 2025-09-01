@@ -259,3 +259,56 @@ def export_applicants_excel(request):
         filename="applicants.xlsx",
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def export_records_excel(request):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "درجات المتقدمين"
+
+    ws.sheet_view.rightToLeft = True
+
+    columns = [
+        ("الاسم باللغة العربية", "arabic_name"),
+        ("الرقم القومي", "national_id"),
+        ("الشعبة", "division"),
+        ("الدرجة", "mark"),
+    ]
+
+    # Header row
+    for col_num, (header, _) in enumerate(columns, 1):
+        ws.cell(row=1, column=col_num, value=header)
+
+    queryset = StudentExam.objects.all()
+
+    # Write data
+    for row_num, obj in enumerate(queryset, 2):
+        national_id = obj.national_id
+        mark = obj.mark
+        try:
+
+            applicant = Applicant.objects.get(national_id=national_id)
+            name = applicant.arabic_name
+            division = applicant.division
+        except Applicant.DoesNotExist:
+            name = None
+            division = None
+
+        ws.cell(row=row_num, column=1, value=str(name) if name is not None else "")
+        ws.cell(row=row_num, column=2, value=national_id)
+        ws.cell(row=row_num, column=3, value=str(division) if division is not None else "")
+        ws.cell(row=row_num, column=4, value=mark)
+
+    # Save to in-memory file
+    output = BytesIO()
+    wb.save(output)
+    output.seek(0)
+
+    return FileResponse(
+        output,
+        as_attachment=True,
+        filename="النتيجة.xlsx",
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
